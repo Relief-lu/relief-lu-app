@@ -93,6 +93,9 @@ const DICT = {
     "push.enable": "Activer les notifications",
     "push.disable": "Désactiver les notifications",
     "push.error": "Impossible d'activer les notifications.",
+    "mission.title": "Pourquoi Relief ?",
+    "mission.text": "Le Luxembourg est l'un des pays les plus riches du monde — ce n'est pas le cas pour tout le monde. Relief remet en circulation, à prix réduit, la nourriture que boulangeries, restaurants, épiceries et traiteurs allaient jeter. Aucun sachet n'est encore en ligne : les premiers commerçants arrivent bientôt.",
+    "mission.backToLanding": "En savoir plus",
   },
   de: {
     "nav.merchant": "Für Geschäfte",
@@ -186,6 +189,9 @@ const DICT = {
     "push.enable": "Benachrichtigungen aktivieren",
     "push.disable": "Benachrichtigungen deaktivieren",
     "push.error": "Benachrichtigungen konnten nicht aktiviert werden.",
+    "mission.title": "Warum Relief?",
+    "mission.text": "Luxemburg ist eines der reichsten Länder der Welt — das gilt nicht für alle. Relief bringt Lebensmittel, die Bäckereien, Restaurants, Lebensmittelgeschäfte und Caterer sonst wegwerfen würden, zu reduzierten Preisen zurück in Umlauf. Noch sind keine Tüten online — die ersten Geschäfte kommen bald.",
+    "mission.backToLanding": "Mehr erfahren",
   },
   en: {
     "nav.merchant": "Merchant space",
@@ -279,6 +285,9 @@ const DICT = {
     "push.enable": "Enable notifications",
     "push.disable": "Disable notifications",
     "push.error": "Couldn't enable notifications.",
+    "mission.title": "Why Relief?",
+    "mission.text": "Luxembourg is one of the richest countries in the world — that's not true for everyone. Relief brings food that bakeries, restaurants, grocery stores and caterers would otherwise throw away back into circulation, at a reduced price. No bags are online yet — the first merchants are coming soon.",
+    "mission.backToLanding": "Learn more",
   },
 };
 

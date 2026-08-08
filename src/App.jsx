@@ -7,6 +7,7 @@ import MerchantView from "./components/MerchantView.jsx";
 import AccountView from "./components/AccountView.jsx";
 import FavoritesView from "./components/FavoritesView.jsx";
 import LegalModal from "./components/LegalModal.jsx";
+import SocialLinks from "./components/SocialLinks.jsx";
 
 export default function App() {
   const [view, setView] = useState("public");
@@ -36,19 +37,22 @@ export default function App() {
         {view === "account" && <AccountView user={user} />}
         {view === "favorites" && <FavoritesView user={user} />}
 
-        <footer style={{ display: "flex", gap: 16, padding: "30px 0", fontSize: 13, opacity: 0.7 }}>
-          <button className="btn secondary small" onClick={() => setLegalModal("mentions")}>
-            Mentions légales
-          </button>
-          <button className="btn secondary small" onClick={() => setLegalModal("cgu")}>
-            CGU
-          </button>
-          <button className="btn secondary small" onClick={() => setLegalModal("confidentialite")}>
-            Confidentialité
-          </button>
-          <button className="btn secondary small" onClick={() => setLegalModal("cookies")}>
-            Cookies
-          </button>
+        <footer style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, padding: "30px 0" }}>
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", fontSize: 13, opacity: 0.7 }}>
+            <button className="btn secondary small" onClick={() => setLegalModal("mentions")}>
+              Mentions légales
+            </button>
+            <button className="btn secondary small" onClick={() => setLegalModal("cgu")}>
+              CGU
+            </button>
+            <button className="btn secondary small" onClick={() => setLegalModal("confidentialite")}>
+              Confidentialité
+            </button>
+            <button className="btn secondary small" onClick={() => setLegalModal("cookies")}>
+              Cookies
+            </button>
+          </div>
+          <SocialLinks />
         </footer>
       </div>
 

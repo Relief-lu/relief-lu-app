@@ -9,6 +9,7 @@ import ReserveModal from "./ReserveModal.jsx";
 import FiltersBar from "./FiltersBar.jsx";
 import MapView from "./MapView.jsx";
 import ImpactBanner from "./ImpactBanner.jsx";
+import MissionIntro from "./MissionIntro.jsx";
 
 export default function PublicView({ user }) {
   const { t } = useI18n();
@@ -73,6 +74,8 @@ export default function PublicView({ user }) {
       <p className="page-sub">{t("public.sub")}</p>
 
       <ImpactBanner />
+
+      {bags !== null && bags.length === 0 && <MissionIntro />}
 
       {bags !== null && bags.length > 0 && (
         <FiltersBar
