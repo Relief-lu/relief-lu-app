@@ -3,6 +3,7 @@ import { useI18n } from "../lib/i18n.jsx";
 import { loadActiveBags } from "../lib/bags";
 import { haversineKm, loadSavedPosition, locate } from "../lib/geolocation";
 import { useFavorites } from "../lib/favorites";
+import { getMerchantRatings } from "../lib/reviews";
 import BagCard from "./BagCard.jsx";
 import ReserveModal from "./ReserveModal.jsx";
 import FiltersBar from "./FiltersBar.jsx";
@@ -19,6 +20,7 @@ export default function PublicView({ user }) {
   const [userPos, setUserPos] = useState(() => loadSavedPosition());
   const [geoStatus, setGeoStatus] = useState("idle");
   const { favoriteIds, toggleFavorite } = useFavorites(user);
+  const [ratings, setRatings] = useState({});
 
   async function refresh() {
     setBags(await loadActiveBags());
@@ -26,6 +28,7 @@ export default function PublicView({ user }) {
 
   useEffect(() => {
     refresh();
+    getMerchantRatings().then(setRatings);
   }, []);
 
   async function handleLocate() {
@@ -99,6 +102,7 @@ export default function PublicView({ user }) {
               distanceKm={bag.distanceKm}
               onToggleFavorite={user ? toggleFavorite : undefined}
               isFavorite={favoriteIds.has(bag.merchant_id)}
+              rating={ratings[bag.merchant_id]}
             />
           ))
         )}

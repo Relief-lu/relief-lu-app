@@ -12,7 +12,9 @@ export async function reserveBag(bagId, quantity) {
 export async function getMyReservations(userId) {
   const { data, error } = await supabase
     .from("reservations")
-    .select("*, bags(title, price_cents, pickup_start, pickup_end, image_url, merchant_id, merchants(business_name, city))")
+    .select(
+      "*, bags(title, price_cents, pickup_start, pickup_end, image_url, merchant_id, merchants(business_name, city)), reviews(id, rating, comment)"
+    )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
   if (error) throw error;

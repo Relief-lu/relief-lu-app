@@ -72,6 +72,12 @@ const DICT = {
     "merchant.locationDenied": "Localisation refusée ou indisponible.",
     "nav.favorites": "Favoris",
     "favorites.empty": "Aucun sachet disponible chez tes commerçants favoris pour l'instant.",
+    "review.title": "Laisser un avis",
+    "review.rating": "Note",
+    "review.comment": "Commentaire (optionnel)",
+    "review.commentPlaceholder": "Comment était ton sachet ?",
+    "review.submit": "Envoyer",
+    "review.leaveOne": "Laisser un avis",
   },
   de: {
     "nav.merchant": "Für Geschäfte",
@@ -144,6 +150,12 @@ const DICT = {
     "merchant.locationDenied": "Standortzugriff verweigert oder nicht verfügbar.",
     "nav.favorites": "Favoriten",
     "favorites.empty": "Aktuell keine Tüten bei deinen favorisierten Geschäften.",
+    "review.title": "Bewertung abgeben",
+    "review.rating": "Bewertung",
+    "review.comment": "Kommentar (optional)",
+    "review.commentPlaceholder": "Wie war deine Tüte?",
+    "review.submit": "Senden",
+    "review.leaveOne": "Bewertung abgeben",
   },
   en: {
     "nav.merchant": "Merchant space",
@@ -216,6 +228,12 @@ const DICT = {
     "merchant.locationDenied": "Location access denied or unavailable.",
     "nav.favorites": "Favorites",
     "favorites.empty": "No bags available from your favorite merchants right now.",
+    "review.title": "Leave a review",
+    "review.rating": "Rating",
+    "review.comment": "Comment (optional)",
+    "review.commentPlaceholder": "How was your bag?",
+    "review.submit": "Submit",
+    "review.leaveOne": "Leave a review",
   },
 };
 

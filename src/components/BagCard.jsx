@@ -29,7 +29,7 @@ function useCountdown(startISO, endISO, t) {
   return `${t("countdown.closesIn")} ${formatDuration(end - now)}`;
 }
 
-export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, distanceKm }) {
+export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, distanceKm, rating }) {
   const { lang, t } = useI18n();
   const countdown = useCountdown(bag.pickup_start, bag.pickup_end, t);
 
@@ -50,7 +50,14 @@ export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, 
         )}
       </div>
       <div className="body">
-        <div className="merchant">{bag.merchants?.business_name || ""}</div>
+        <div className="merchant">
+          {bag.merchants?.business_name || ""}
+          {rating && (
+            <span className="stars" style={{ marginLeft: 6 }}>
+              {"★".repeat(Math.round(rating.avg))} ({rating.count})
+            </span>
+          )}
+        </div>
         <h3>{bag.title}</h3>
         <div className="meta">
           {t("pickupWindow")} {formatPickupWindow(bag.pickup_start, bag.pickup_end, lang)} · {bag.quantity_left} {t("left")}
