@@ -173,12 +173,14 @@
     flex-wrap:wrap; gap:14px;
   }
   .foot-logo{font-family:'Fraunces', serif; font-weight:680; font-size:17px;}
-  .foot-links{display:flex; gap:18px;}
+  .foot-links{display:flex; gap:14px; align-items:center;}
   .foot-links a{
     color:var(--paper-dim); text-decoration:none; font-size:14px;
     border-bottom:1px solid transparent;
   }
   .foot-links a:hover{color:var(--honey); border-color:var(--honey);}
+  .social-icon{display:flex; line-height:0; border-bottom:none !important; opacity:0.9; transition:opacity .15s ease, transform .15s ease;}
+  .social-icon:hover{opacity:1; transform:translateY(-1px);}
 
   @media (max-width:760px){
     .tickets{grid-template-columns:1fr;}
@@ -244,7 +246,7 @@
         <div class="step">
           <div class="tag">Toi</div>
           <h3>Tu réserves, tu récupères</h3>
-          <p>Réservation en 2 minutes sur l'app, retrait sur place au créneau fixé, paiement directement sur place.</p>
+          <p>Réservation en 2 minutes sur l'app, retrait sur place au créneau fixé.</p>
         </div>
       </div>
     </section>
@@ -252,8 +254,12 @@
     <footer>
       <div class="foot-logo">relief<span style="color:var(--honey)">.lu</span></div>
       <div class="foot-links">
-        <a href="#" id="link-ig">Instagram</a>
-        <a href="#" id="link-fb">Facebook</a>
+        <a href="#" id="link-ig" class="social-icon" aria-label="Instagram">
+          <svg viewBox="0 0 48 48" width="26" height="26"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset="0.05" stop-color="#fdf497"/><stop offset="0.45" stop-color="#fd5949"/><stop offset="0.6" stop-color="#d6249f"/><stop offset="0.9" stop-color="#285AEB"/></radialGradient></defs><rect width="48" height="48" rx="12" fill="url(#ig-grad)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="31.6" cy="16.4" r="1.6" fill="#fff"/></svg>
+        </a>
+        <a href="#" id="link-fb" class="social-icon" aria-label="Facebook">
+          <svg viewBox="0 0 48 48" width="26" height="26"><rect width="48" height="48" rx="12" fill="#1877F2"/><path d="M27.5 42V25.9h5.4l0.8-6.3h-6.2v-4c0-1.8 0.5-3.1 3.1-3.1h3.3V6.9c-0.6-0.1-2.5-0.3-4.8-0.3-4.8 0-8 2.9-8 8.2v4.6h-5.4v6.3h5.4V42h6.4z" fill="#fff"/></svg>
+        </a>
       </div>
     </footer>
   </div>
