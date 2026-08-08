@@ -90,6 +90,9 @@ const DICT = {
     "merchant.noReservations": "Aucune réservation pour ce sachet.",
     "merchant.markPickedUp": "Marquer retiré",
     "merchant.markNoShow": "Non retiré",
+    "push.enable": "Activer les notifications",
+    "push.disable": "Désactiver les notifications",
+    "push.error": "Impossible d'activer les notifications.",
   },
   de: {
     "nav.merchant": "Für Geschäfte",
@@ -180,6 +183,9 @@ const DICT = {
     "merchant.noReservations": "Noch keine Reservierung für diese Tüte.",
     "merchant.markPickedUp": "Als abgeholt markieren",
     "merchant.markNoShow": "Nicht abgeholt",
+    "push.enable": "Benachrichtigungen aktivieren",
+    "push.disable": "Benachrichtigungen deaktivieren",
+    "push.error": "Benachrichtigungen konnten nicht aktiviert werden.",
   },
   en: {
     "nav.merchant": "Merchant space",
@@ -270,6 +276,9 @@ const DICT = {
     "merchant.noReservations": "No reservation for this bag yet.",
     "merchant.markPickedUp": "Mark picked up",
     "merchant.markNoShow": "No-show",
+    "push.enable": "Enable notifications",
+    "push.disable": "Disable notifications",
+    "push.error": "Couldn't enable notifications.",
   },
 };
 

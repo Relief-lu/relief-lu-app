@@ -28,6 +28,8 @@ jobs:
           # Clé anon Supabase — conçue pour être publique (protégée par RLS), pas un secret.
           VITE_SUPABASE_URL: https://ucxsqregeorfjakgomaj.supabase.co
           VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjeHNxcmVnZW9yZmpha2dvbWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTc1MjIsImV4cCI6MjEwMTc3MzUyMn0.-S2csTBH-qpbK60N5RM-lxwjOG9seo1vkIwqTG0MG24
+          # Clé publique VAPID — safe à exposer côté client, c'est fait pour (la clé privée reste secrète côté Edge Function).
+          VITE_VAPID_PUBLIC_KEY: BGpA9U_1TZfvqGvEQG3x0sDb4s8qaFSZJpuuL7MoT1-AIjoDDCX878bvClA1qKKkQRI2qBGFTSv0Piic2uXGu-4
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -5,6 +5,7 @@ import { useFavorites } from "../lib/favorites";
 import BagCard from "./BagCard.jsx";
 import ReserveModal from "./ReserveModal.jsx";
 import AuthPrompt from "./AuthPrompt.jsx";
+import NotificationToggle from "./NotificationToggle.jsx";
 
 export default function FavoritesView({ user }) {
   const { t } = useI18n();
@@ -32,6 +33,8 @@ export default function FavoritesView({ user }) {
       ) : bags === null ? (
         <p className="page-sub">{t("public.loading")}</p>
       ) : (
+        <>
+        <NotificationToggle user={user} />
         <div className="grid">
           {!favBags.length ? (
             <div className="empty">{t("favorites.empty")}</div>
@@ -47,6 +50,7 @@ export default function FavoritesView({ user }) {
             ))
           )}
         </div>
+        </>
       )}
       <ReserveModal bag={reserving} user={user} onClose={() => setReserving(null)} onReserved={refresh} />
     </div>
