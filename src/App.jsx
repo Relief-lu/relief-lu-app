@@ -56,7 +56,20 @@ export default function App() {
         </footer>
       </div>
 
-      {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+      {legalModal && (
+        <LegalModal
+          type={legalModal}
+          onClose={() => {
+            setLegalModal(null);
+            // Nettoie ?legal=... de l'URL — sinon un rechargement (ou la réouverture
+            // de la PWA) rouvrirait la modale automatiquement, et le bouton "retour"
+            // du navigateur ne ramènerait jamais à la page précédente.
+            const url = new URL(window.location.href);
+            url.searchParams.delete("legal");
+            window.history.replaceState({}, "", url);
+          }}
+        />
+      )}
     </LangProvider>
   );
 }
