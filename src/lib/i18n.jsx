@@ -78,6 +78,8 @@ const DICT = {
     "review.commentPlaceholder": "Comment était ton sachet ?",
     "review.submit": "Envoyer",
     "review.leaveOne": "Laisser un avis",
+    "impact.bagsSaved": "sachets sauvés",
+    "impact.co2Saved": "CO2 évité (estimation)",
   },
   de: {
     "nav.merchant": "Für Geschäfte",
@@ -156,6 +158,8 @@ const DICT = {
     "review.commentPlaceholder": "Wie war deine Tüte?",
     "review.submit": "Senden",
     "review.leaveOne": "Bewertung abgeben",
+    "impact.bagsSaved": "gerettete Tüten",
+    "impact.co2Saved": "vermiedenes CO2 (Schätzung)",
   },
   en: {
     "nav.merchant": "Merchant space",
@@ -234,6 +238,8 @@ const DICT = {
     "review.commentPlaceholder": "How was your bag?",
     "review.submit": "Submit",
     "review.leaveOne": "Leave a review",
+    "impact.bagsSaved": "bags saved",
+    "impact.co2Saved": "CO2 avoided (estimate)",
   },
 };
 

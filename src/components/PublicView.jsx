@@ -8,6 +8,7 @@ import BagCard from "./BagCard.jsx";
 import ReserveModal from "./ReserveModal.jsx";
 import FiltersBar from "./FiltersBar.jsx";
 import MapView from "./MapView.jsx";
+import ImpactBanner from "./ImpactBanner.jsx";
 
 export default function PublicView({ user }) {
   const { t } = useI18n();
@@ -70,6 +71,8 @@ export default function PublicView({ user }) {
     <div>
       <h1 className="page-title">{t("public.title")}</h1>
       <p className="page-sub">{t("public.sub")}</p>
+
+      <ImpactBanner />
 
       {bags !== null && bags.length > 0 && (
         <FiltersBar
