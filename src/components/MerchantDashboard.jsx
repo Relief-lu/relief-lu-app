@@ -3,6 +3,8 @@ import { useI18n } from "../lib/i18n.jsx";
 import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
 import { getMerchant } from "../lib/merchants";
 import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
+import MerchantStats from "./MerchantStats.jsx";
+import MerchantBagRow from "./MerchantBagRow.jsx";
 
 const emptyForm = {
   title: "",
@@ -21,9 +23,11 @@ export default function MerchantDashboard({ user }) {
   const [msg, setMsg] = useState(null);
   const [myBags, setMyBags] = useState([]);
   const [merchant, setMerchant] = useState(null);
+  const [statsKey, setStatsKey] = useState(0);
 
   async function refreshMyBags() {
     setMyBags(await loadMerchantBags(user.id));
+    setStatsKey((k) => k + 1);
   }
 
   useEffect(() => {
@@ -68,6 +72,10 @@ export default function MerchantDashboard({ user }) {
 
   return (
     <>
+      <div className="panel">
+        <MerchantStats merchantId={user.id} refreshKey={statsKey} />
+      </div>
+
       {merchant && <MerchantLocationPicker user={user} merchant={merchant} />}
 
       <div className="panel">
@@ -127,16 +135,7 @@ export default function MerchantDashboard({ user }) {
         {!myBags.length ? (
           <span className="page-sub">{t("merchant.none")}</span>
         ) : (
-          myBags.map((b) => (
-            <div className="my-bag" key={b.id}>
-              <div className="info">
-                <b>{b.title}</b>
-                <span>
-                  {b.quantity_left}/{b.quantity_total} {t("left")} · {(b.price_cents / 100).toFixed(2)} € · {b.status}
-                </span>
-              </div>
-            </div>
-          ))
+          myBags.map((b) => <MerchantBagRow key={b.id} bag={b} onChanged={refreshMyBags} />)
         )}
       </div>
     </>

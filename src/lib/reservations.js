@@ -9,6 +9,21 @@ export async function reserveBag(bagId, quantity) {
   return Array.isArray(data) ? data[0] : data;
 }
 
+export async function getReservationsForBag(bagId) {
+  const { data, error } = await supabase
+    .from("reservations")
+    .select("*")
+    .eq("bag_id", bagId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+export async function updateReservationStatus(reservationId, status) {
+  const { error } = await supabase.from("reservations").update({ status }).eq("id", reservationId);
+  if (error) throw error;
+}
+
 export async function getMyReservations(userId) {
   const { data, error } = await supabase
     .from("reservations")

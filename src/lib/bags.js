@@ -32,3 +32,8 @@ export async function publishBag(payload) {
   const { error } = await supabase.from("bags").insert(payload);
   if (error) throw error;
 }
+
+export async function cancelBag(bagId) {
+  const { error } = await supabase.from("bags").update({ status: "cancelled" }).eq("id", bagId);
+  if (error) throw error;
+}
