@@ -222,7 +222,7 @@ const CONTENT = {
 };
 
 export default function LegalModal({ type, onClose }) {
-  const { lang } = useI18n();
+  const { lang, setLang } = useI18n();
   const content = (CONTENT[lang] || CONTENT.fr)[type];
   if (!content) return null;
 
@@ -232,6 +232,15 @@ export default function LegalModal({ type, onClose }) {
         <button className="close" onClick={onClose}>
           ✕
         </button>
+        {/* Le sélecteur de langue du header est caché derrière cette modale (overlay
+            plein écran) et donc inatteignable — on en propose un ici, dans la modale. */}
+        <div className="langs" style={{ display: "inline-flex", marginBottom: 14 }}>
+          {["fr", "de", "en"].map((l) => (
+            <button key={l} className={lang === l ? "active" : ""} onClick={() => setLang(l)}>
+              {l.toUpperCase()}
+            </button>
+          ))}
+        </div>
         <h2>{content.title}</h2>
         <div style={{ fontSize: 14, lineHeight: 1.6 }}>
           {content.paragraphs.map((p, i) =>
