@@ -28,6 +28,16 @@ export default function Header({ view, user, onNavigate }) {
           className="nav-link"
           onClick={(e) => {
             e.preventDefault();
+            onNavigate("favorites");
+          }}
+        >
+          {t("nav.favorites")}
+        </a>
+        <a
+          href="#"
+          className="nav-link"
+          onClick={(e) => {
+            e.preventDefault();
             onNavigate("account");
           }}
         >

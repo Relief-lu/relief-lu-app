@@ -5,6 +5,7 @@ import Header from "./components/Header.jsx";
 import PublicView from "./components/PublicView.jsx";
 import MerchantView from "./components/MerchantView.jsx";
 import AccountView from "./components/AccountView.jsx";
+import FavoritesView from "./components/FavoritesView.jsx";
 
 export default function App() {
   const [view, setView] = useState("public");
@@ -25,6 +26,7 @@ export default function App() {
         {view === "public" && <PublicView user={user} />}
         {view === "merchant" && <MerchantView user={user} />}
         {view === "account" && <AccountView user={user} />}
+        {view === "favorites" && <FavoritesView user={user} />}
       </div>
     </LangProvider>
   );

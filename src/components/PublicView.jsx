@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { loadActiveBags } from "../lib/bags";
 import { haversineKm, loadSavedPosition, locate } from "../lib/geolocation";
+import { useFavorites } from "../lib/favorites";
 import BagCard from "./BagCard.jsx";
 import ReserveModal from "./ReserveModal.jsx";
 import FiltersBar from "./FiltersBar.jsx";
@@ -17,6 +18,7 @@ export default function PublicView({ user }) {
   const [viewMode, setViewMode] = useState("grid");
   const [userPos, setUserPos] = useState(() => loadSavedPosition());
   const [geoStatus, setGeoStatus] = useState("idle");
+  const { favoriteIds, toggleFavorite } = useFavorites(user);
 
   async function refresh() {
     setBags(await loadActiveBags());
@@ -89,7 +91,16 @@ export default function PublicView({ user }) {
         ) : !filtered.length ? (
           <div className="empty">{t("public.empty")}</div>
         ) : (
-          filtered.map((bag) => <BagCard key={bag.id} bag={bag} onReserve={setReserving} distanceKm={bag.distanceKm} />)
+          filtered.map((bag) => (
+            <BagCard
+              key={bag.id}
+              bag={bag}
+              onReserve={setReserving}
+              distanceKm={bag.distanceKm}
+              onToggleFavorite={user ? toggleFavorite : undefined}
+              isFavorite={favoriteIds.has(bag.merchant_id)}
+            />
+          ))
         )}
       </div>
       <ReserveModal bag={reserving} user={user} onClose={() => setReserving(null)} onReserved={refresh} />

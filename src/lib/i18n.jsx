@@ -70,6 +70,8 @@ const DICT = {
     "merchant.locationDesc": "Clique sur la carte ou fais glisser le repère — les clients te verront sur la carte et pourront trier par distance.",
     "merchant.locationSaved": "Position enregistrée.",
     "merchant.locationDenied": "Localisation refusée ou indisponible.",
+    "nav.favorites": "Favoris",
+    "favorites.empty": "Aucun sachet disponible chez tes commerçants favoris pour l'instant.",
   },
   de: {
     "nav.merchant": "Für Geschäfte",
@@ -140,6 +142,8 @@ const DICT = {
     "merchant.locationDesc": "Klicke auf die Karte oder ziehe den Marker — Kunden sehen dich auf der Karte und können nach Entfernung sortieren.",
     "merchant.locationSaved": "Standort gespeichert.",
     "merchant.locationDenied": "Standortzugriff verweigert oder nicht verfügbar.",
+    "nav.favorites": "Favoriten",
+    "favorites.empty": "Aktuell keine Tüten bei deinen favorisierten Geschäften.",
   },
   en: {
     "nav.merchant": "Merchant space",
@@ -210,6 +214,8 @@ const DICT = {
     "merchant.locationDesc": "Click the map or drag the pin — customers will see you on the map and can sort by distance.",
     "merchant.locationSaved": "Location saved.",
     "merchant.locationDenied": "Location access denied or unavailable.",
+    "nav.favorites": "Favorites",
+    "favorites.empty": "No bags available from your favorite merchants right now.",
   },
 };
 
