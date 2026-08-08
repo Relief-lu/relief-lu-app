@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
 import { getMerchant } from "../lib/merchants";
+import { notifyNewBag } from "../lib/notify";
 import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
 import MerchantStats from "./MerchantStats.jsx";
 import MerchantBagRow from "./MerchantBagRow.jsx";
@@ -49,7 +50,7 @@ export default function MerchantDashboard({ user }) {
       let image_url = null;
       if (photo) image_url = await uploadBagPhoto(user.id, photo);
 
-      await publishBag({
+      const newBag = await publishBag({
         merchant_id: user.id,
         title: form.title.trim(),
         category: form.category,
@@ -61,6 +62,7 @@ export default function MerchantDashboard({ user }) {
         pickup_end: form.end,
         image_url,
       });
+      notifyNewBag(newBag);
       setMsg({ type: "success", text: "Sachet publié !" });
       setForm(emptyForm);
       setPhoto(null);

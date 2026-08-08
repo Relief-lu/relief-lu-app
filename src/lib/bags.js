@@ -29,8 +29,9 @@ export async function uploadBagPhoto(userId, file) {
 }
 
 export async function publishBag(payload) {
-  const { error } = await supabase.from("bags").insert(payload);
+  const { data, error } = await supabase.from("bags").insert(payload).select().single();
   if (error) throw error;
+  return data;
 }
 
 export async function cancelBag(bagId) {
