@@ -1,6 +1,7 @@
 import { useI18n } from "../lib/i18n.jsx";
+import { logout } from "../lib/auth";
 
-export default function Header({ view, onNavigate }) {
+export default function Header({ view, user, onNavigate }) {
   const { lang, setLang, t } = useI18n();
   return (
     <header>
@@ -27,11 +28,26 @@ export default function Header({ view, onNavigate }) {
           className="nav-link"
           onClick={(e) => {
             e.preventDefault();
+            onNavigate("account");
+          }}
+        >
+          {t("nav.account")}
+        </a>
+        <a
+          href="#"
+          className="nav-link"
+          onClick={(e) => {
+            e.preventDefault();
             onNavigate(view === "merchant" ? "public" : "merchant");
           }}
         >
           {t("nav.merchant")}
         </a>
+        {user && (
+          <button className="btn secondary small" onClick={logout}>
+            {t("account.logout")}
+          </button>
+        )}
       </div>
     </header>
   );

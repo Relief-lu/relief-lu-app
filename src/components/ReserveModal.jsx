@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { reserveBag } from "../lib/reservations";
 import { formatPickupWindow } from "./BagCard.jsx";
+import AuthPrompt from "./AuthPrompt.jsx";
 
-export default function ReserveModal({ bag, onClose, onReserved }) {
+export default function ReserveModal({ bag, user, onClose, onReserved }) {
   const { lang, t } = useI18n();
-  const [email, setEmail] = useState("");
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const [pickupCode, setPickupCode] = useState(null);
@@ -14,9 +14,8 @@ export default function ReserveModal({ bag, onClose, onReserved }) {
 
   async function handleConfirm() {
     setError("");
-    if (!email.trim()) return;
     try {
-      const row = await reserveBag(bag.id, email.trim(), qty);
+      const row = await reserveBag(bag.id, qty);
       setPickupCode(row.pickup_code);
       onReserved();
     } catch (err) {
@@ -30,16 +29,14 @@ export default function ReserveModal({ bag, onClose, onReserved }) {
         <button className="close" onClick={onClose}>
           ✕
         </button>
-        {!pickupCode ? (
+        {!user ? (
+          <AuthPrompt title={t("reserve.loginRequired")} description={t("reserve.loginDesc")} />
+        ) : !pickupCode ? (
           <div>
             <h2>{bag.title}</h2>
             <p className="desc">
               {(bag.price_cents / 100).toFixed(2)} € · {formatPickupWindow(bag.pickup_start, bag.pickup_end, lang)}
             </p>
-            <div className="field">
-              <label>{t("reserve.email")}</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="toi@exemple.lu" />
-            </div>
             <div className="field">
               <label>{t("reserve.qty")}</label>
               <input type="number" min="1" value={qty} onChange={(e) => setQty(parseInt(e.target.value, 10) || 1)} />
