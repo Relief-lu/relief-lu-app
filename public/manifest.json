@@ -2,7 +2,7 @@
   "name": "Relief — Luxembourg",
   "short_name": "Relief",
   "description": "Le Luxembourg est l'un des pays les plus riches du monde. Ce n'est pas le cas pour tout le monde. Relief redonne de la valeur à ce qui allait être jeté.",
-  "start_url": "./index.html",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#16232C",
