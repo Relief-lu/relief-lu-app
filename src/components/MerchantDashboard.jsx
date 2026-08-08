@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
+import { getMerchant } from "../lib/merchants";
+import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
 
 const emptyForm = {
   title: "",
@@ -18,6 +20,7 @@ export default function MerchantDashboard({ user }) {
   const [photo, setPhoto] = useState(null);
   const [msg, setMsg] = useState(null);
   const [myBags, setMyBags] = useState([]);
+  const [merchant, setMerchant] = useState(null);
 
   async function refreshMyBags() {
     setMyBags(await loadMerchantBags(user.id));
@@ -25,6 +28,7 @@ export default function MerchantDashboard({ user }) {
 
   useEffect(() => {
     refreshMyBags();
+    getMerchant(user.id).then(setMerchant);
   }, [user.id]);
 
   function set(field, value) {
@@ -64,6 +68,8 @@ export default function MerchantDashboard({ user }) {
 
   return (
     <>
+      {merchant && <MerchantLocationPicker user={user} merchant={merchant} />}
+
       <div className="panel">
         <h2>{t("merchant.newBag")}</h2>
         <div className="two-col">
