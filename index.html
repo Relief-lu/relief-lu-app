@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Relief — Luxembourg</title>
+<meta name="description" content="Le Luxembourg est l'un des pays les plus riches du monde. Ce n'est pas le cas pour tout le monde. Relief redonne de la valeur à ce qui allait être jeté.">
+<meta name="theme-color" content="#16232C">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,680&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16232C;
+    --navy-2:#1E313D;
+    --paper:#EFE6D3;
+    --paper-dim:#D9CDB2;
+    --honey:#E8A33D;
+    --honey-dim:#B87F2E;
+    --sage:#7FA88C;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--navy);
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:0 28px;}
+
+  /* header */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:30px 0;
+  }
+  .logo{
+    font-family:'Fraunces', serif; font-weight:680; font-size:22px;
+    letter-spacing:0.5px; color:var(--paper);
+  }
+  .logo .dot{color:var(--honey);}
+  .locale{
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    color:var(--paper-dim); border:1px solid rgba(239,230,211,0.25);
+    padding:6px 12px; border-radius:100px;
+  }
+
+  /* hero */
+  .hero{padding:56px 0 40px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    color:var(--honey); text-transform:uppercase; letter-spacing:1.5px;
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--honey); display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:560; font-optical-sizing:auto;
+    font-size:clamp(34px, 5.4vw, 62px); line-height:1.08;
+    margin:0 0 26px; max-width:15ch;
+  }
+  h1 em{
+    font-style:normal; color:var(--honey);
+  }
+  .sub{
+    font-size:19px; line-height:1.6; color:var(--paper-dim);
+    max-width:46ch; margin:0 0 38px;
+  }
+
+  /* email capture */
+  .capture{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  }
+  .capture input[type=email]{
+    flex:1 1 260px; min-width:0;
+    background:var(--navy-2); border:1px solid rgba(239,230,211,0.22);
+    border-radius:10px; padding:15px 16px;
+    color:var(--paper); font-family:'Work Sans', sans-serif; font-size:15px;
+  }
+  .capture input[type=email]::placeholder{color:var(--paper-dim);}
+  .capture input[type=email]:focus{outline:2px solid var(--honey); outline-offset:1px;}
+  .capture button{
+    background:var(--honey); color:var(--navy); border:none;
+    font-family:'Work Sans', sans-serif; font-weight:700; font-size:15px;
+    padding:15px 24px; border-radius:10px; cursor:pointer;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .capture button:hover{background:#f0b862;}
+  .capture button:active{transform:scale(0.98);}
+  .capture-note{
+    font-size:13px; color:var(--paper-dim); margin-top:12px;
+  }
+  .thanks{
+    display:none; font-family:'IBM Plex Mono', monospace; font-size:14px;
+    color:var(--sage); padding:15px 0;
+  }
+
+  /* stat tickets */
+  .tickets{
+    padding:54px 0 30px;
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:22px;
+  }
+  .ticket{
+    background:var(--navy-2);
+    border-radius:16px;
+    padding:26px 22px 22px;
+    position:relative;
+  }
+  .ticket::before, .ticket::after{
+    content:""; position:absolute; top:50%; transform:translateY(-50%);
+    width:22px; height:22px; border-radius:50%; background:var(--navy);
+  }
+  .ticket::before{left:-11px;}
+  .ticket::after{right:-11px;}
+  .ticket .rule{
+    border-top:2px dashed rgba(239,230,211,0.2);
+    margin:16px 0;
+  }
+  .ticket .num{
+    font-family:'Fraunces', serif; font-weight:680; font-size:40px;
+    color:var(--honey); line-height:1;
+  }
+  .ticket .label{
+    font-size:14px; color:var(--paper-dim); line-height:1.5; margin-top:10px;
+  }
+  .ticket .src{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    color:rgba(239,230,211,0.4); margin-top:14px; display:block;
+  }
+
+  /* mission */
+  .mission{
+    padding:64px 0; border-top:1px solid rgba(239,230,211,0.12);
+  }
+  .mission h2{
+    font-family:'Fraunces', serif; font-weight:560; font-size:clamp(24px,3vw,32px);
+    max-width:24ch; line-height:1.3; margin:0 0 18px;
+  }
+  .mission p{
+    color:var(--paper-dim); font-size:16px; line-height:1.7; max-width:56ch;
+  }
+
+  /* how it works */
+  .how{padding:20px 0 64px;}
+  .how-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    color:var(--sage); text-transform:uppercase; letter-spacing:1.5px;
+    margin-bottom:26px;
+  }
+  .steps{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .step{
+    background:var(--navy-2); border-radius:16px; padding:26px;
+    border-left:3px solid var(--sage);
+  }
+  .step .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    color:var(--sage); text-transform:uppercase; letter-spacing:1px;
+  }
+  .step h3{
+    font-family:'Fraunces', serif; font-weight:560; font-size:22px;
+    margin:10px 0 10px;
+  }
+  .step p{color:var(--paper-dim); font-size:15px; line-height:1.6; margin:0;}
+
+  footer{
+    padding:34px 0 46px; border-top:1px solid rgba(239,230,211,0.12);
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:14px;
+  }
+  .foot-logo{font-family:'Fraunces', serif; font-weight:680; font-size:17px;}
+  .foot-links{display:flex; gap:18px;}
+  .foot-links a{
+    color:var(--paper-dim); text-decoration:none; font-size:14px;
+    border-bottom:1px solid transparent;
+  }
+  .foot-links a:hover{color:var(--honey); border-color:var(--honey);}
+
+  @media (max-width:760px){
+    .tickets{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .capture{flex-direction:column; align-items:stretch;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">relief<span class="dot">.lu</span></div>
+      <div class="locale">🇱🇺 FR</div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Arrive à la rentrée</div>
+      <h1>Le Luxembourg est l'un des pays les plus riches du monde. <em>Ce n'est pas le cas pour tout le monde.</em></h1>
+      <p class="sub">Relief redonne de la valeur à la nourriture qui allait être jetée — chez les entreprises, bientôt chez les commerçants — pour que chaque euro compte un peu moins fort.</p>
+
+      <form class="capture" id="capture-form">
+        <input type="email" id="capture-email" placeholder="ton-email@exemple.lu" required>
+        <button type="submit">Je veux être prévenu·e</button>
+      </form>
+      <div class="thanks" id="thanks">✓ Merci — tu seras prévenu·e au lancement.</div>
+      <div class="capture-note">Zéro spam. Un seul message, le jour où c'est prêt.</div>
+    </section>
+
+    <section class="tickets">
+      <div class="ticket">
+        <div class="num">1 / 7</div>
+        <div class="label">résident·es du Luxembourg vivent avec un risque de pauvreté au quotidien</div>
+        <div class="rule"></div>
+        <span class="src">STATEC, 2025</span>
+      </div>
+      <div class="ticket">
+        <div class="num">×3</div>
+        <div class="label">c'est le risque de pauvreté d'un·e locataire par rapport à un·e propriétaire</div>
+        <div class="rule"></div>
+        <span class="src">STATEC — 29,7% vs 10,3%</span>
+      </div>
+      <div class="ticket">
+        <div class="num">60%</div>
+        <div class="label">du revenu englouti dans le logement, pour les ménages les plus modestes</div>
+        <div class="rule"></div>
+        <span class="src">STATEC, 2025</span>
+      </div>
+    </section>
+
+    <section class="mission">
+      <h2>On ne parle pas de climat. On parle de ceux pour qui chaque course compte.</h2>
+      <p>Chaque jour, des entreprises et des commerces luxembourgeois jettent de la nourriture encore bonne. Relief la remet en circulation, à prix réduit, pour celles et ceux qui en ont vraiment besoin — sans discours, sans jugement, juste un coup de pouce concret.</p>
+    </section>
+
+    <section class="how">
+      <div class="how-eyebrow">Comment ça marche</div>
+      <div class="steps">
+        <div class="step">
+          <div class="tag">Phase 1 — Entreprises</div>
+          <h3>Les invendus du soir, proposés aux équipes</h3>
+          <p>Cantines et traiteurs d'entreprise annoncent leurs surplus du jour à prix réduit, réservés en interne, récupérés sur place.</p>
+        </div>
+        <div class="step">
+          <div class="tag">Phase 2 — Grand public</div>
+          <h3>Les commerçants, ouverts à tous</h3>
+          <p>Boulangeries, restaurants et commerces publient leurs invendus. Réservation en 2 minutes, retrait sur un créneau fixé.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="foot-logo">relief<span style="color:var(--honey)">.lu</span></div>
+      <div class="foot-links">
+        <a href="#" id="link-ig">Instagram</a>
+        <a href="#" id="link-fb">Facebook</a>
+      </div>
+    </footer>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  // 1. Dans Supabase → Project Settings → API, copie "Project URL" et la clé "anon public".
+  // 2. Colle-les ci-dessous. La clé "anon" est faite pour être publique côté client
+  //    (la sécurité vient de la policy RLS créée par supabase-setup.sql, pas du secret de la clé).
+  const SUPABASE_URL = "https://ucxsqregeorfjakgomaj.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjeHNxcmVnZW9yZmpha2dvbWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTc1MjIsImV4cCI6MjEwMTc3MzUyMn0.-S2csTBH-qpbK60N5RM-lxwjOG9seo1vkIwqTG0MG24";
+
+  const supabaseReady = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 10;
+  const sb = supabaseReady ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+  const form = document.getElementById('capture-form');
+  const thanks = document.getElementById('thanks');
+  const emailInput = document.getElementById('capture-email');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const button = form.querySelector('button');
+    const email = emailInput.value.trim();
+
+    if (!sb) {
+      console.warn('Supabase non configuré — voir les constantes SUPABASE_URL / SUPABASE_ANON_KEY en haut de ce script.');
+      form.style.display = 'none';
+      thanks.textContent = "✓ Merci — (mode démo, l'email n'est pas encore enregistré : configure Supabase).";
+      thanks.style.display = 'block';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "...";
+
+    const { error } = await sb.from('waitlist').insert({ email });
+
+    if (error) {
+      button.disabled = false;
+      button.textContent = "Je veux être prévenu·e";
+      if (error.code === '23505') {
+        thanks.textContent = "✓ Tu es déjà inscrit·e — à très vite.";
+      } else {
+        thanks.textContent = "Un souci est survenu, réessaie dans un instant.";
+      }
+      thanks.style.display = 'block';
+      return;
+    }
+
+    form.style.display = 'none';
+    thanks.textContent = "✓ Merci — tu seras prévenu·e au lancement.";
+    thanks.style.display = 'block';
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(()=>{});
+    });
+  }
+</script>
+</body>
+</html>
