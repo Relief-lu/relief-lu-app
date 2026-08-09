@@ -39,7 +39,7 @@ header {
 }
 .langs button.active { background: var(--honey); color: var(--navy); }
 .nav-link {
-  font-size: 14px; font-weight: 600; text-decoration: none;
+  font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;
   border: 1px solid rgba(239,230,211,0.25); padding: 9px 16px; border-radius: 100px;
   background: none; color: var(--paper);
 }
@@ -180,4 +180,9 @@ h1.page-title {
   .two-col { grid-template-columns: 1fr; }
   .merchant-hero { grid-template-columns: 1fr; }
   .merchant-visual { min-height: 160px; }
+
+  /* Trop de pills (langues + Favoris + Mon compte + Espace commerçant) pour
+     tenir à côté du logo — on les laisse s'étaler sur toute la largeur. */
+  header { flex-direction: column; align-items: stretch; }
+  .head-right { width: 100%; flex-wrap: wrap; }
 }

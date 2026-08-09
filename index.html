@@ -266,8 +266,13 @@
     .tickets{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
     .capture{flex-direction:column; align-items:stretch;}
-    .city-search{order:3; max-width:none; width:100%;}
     .why-grid{grid-template-columns:1fr;}
+
+    /* Header : empile logo / recherche / liens plutôt que de les tasser
+       tous sur la même ligne — trop d'éléments pour tenir en largeur. */
+    header{flex-direction:column; align-items:stretch;}
+    .city-search{order:2; max-width:none; width:100%;}
+    .head-right{order:3; width:100%; justify-content:flex-start; flex-wrap:wrap;}
   }
 </style>
 </head>
