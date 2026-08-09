@@ -14,6 +14,27 @@ export default function App() {
   const [user, setUser] = useState(undefined); // undefined = loading, null = signed out
   const [legalModal, setLegalModal] = useState(null);
   const [pendingReserveBagId, setPendingReserveBagId] = useState(null);
+  const [authError, setAuthError] = useState(null);
+
+  // Supabase renvoie une erreur (lien expiré, déjà utilisé, scanné/consommé
+  // automatiquement par un client email avant le vrai clic...) via le hash
+  // ou les query params de l'URL — sans ça, l'échec est totalement silencieux
+  // et l'app a juste l'air de "rester déconnectée" sans dire pourquoi.
+  useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const searchParams = new URLSearchParams(window.location.search);
+    const description =
+      hashParams.get("error_description") || searchParams.get("error_description") || hashParams.get("error") || searchParams.get("error");
+    if (description) {
+      setAuthError(decodeURIComponent(description.replace(/\+/g, " ")));
+      const url = new URL(window.location.href);
+      url.hash = "";
+      url.searchParams.delete("error");
+      url.searchParams.delete("error_code");
+      url.searchParams.delete("error_description");
+      window.history.replaceState({}, "", url);
+    }
+  }, []);
 
   useEffect(() => {
     // Restaure la vue d'où la demande de lien magique est partie (espace
@@ -56,6 +77,17 @@ export default function App() {
     <LangProvider>
       <div className="wrap">
         <Header view={view} user={user} onNavigate={setView} />
+
+        {authError && (
+          <div className="panel" style={{ borderColor: "var(--red)", marginBottom: 20 }}>
+            <p className="error-msg" style={{ margin: 0 }}>
+              Le lien de connexion n'a pas fonctionné ({authError}). Il est probablement expiré ou déjà utilisé — redemande un nouveau lien.
+            </p>
+            <button className="btn secondary small" style={{ marginTop: 10 }} onClick={() => setAuthError(null)}>
+              ✕
+            </button>
+          </div>
+        )}
         {view === "public" && (
           <PublicView user={user} pendingReserveBagId={pendingReserveBagId} onPendingReserveHandled={() => setPendingReserveBagId(null)} />
         )}
