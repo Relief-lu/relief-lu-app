@@ -1,14 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY, {
-  auth: {
-    // Le flux PKCE (par défaut) exige que le "code verifier" stocké au moment
-    // de la demande de lien magique soit encore présent dans le navigateur qui
-    // ouvre le lien — ce qui échoue silencieusement si le lien est ouvert
-    // depuis un autre contexte (ex: le navigateur intégré d'une appli email
-    // sur mobile, différent du navigateur où le lien a été demandé). Le flux
-    // implicite envoie directement les jetons de session dans l'URL, donc
-    // n'importe quel navigateur qui ouvre le lien peut établir la session.
-    flowType: "implicit",
-  },
-});
+// Pas de config auth spécifique — même réglage que Tatuca (flux PKCE par
+// défaut), qui fonctionne de manière confirmée avec le même pattern
+// magic-link. Le passage en flux implicite avait été tenté pour un autre
+// bug (lien ouvert dans un contexte différent) mais n'a jamais été confirmé
+// par un vrai test, et coïncide avec la panne actuelle du login — retour à
+// l'état aligné sur la référence qui marche.
+export const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
