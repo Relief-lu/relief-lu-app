@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useI18n } from "../lib/i18n.jsx";
+import { merchantMarkerIcon } from "../lib/leafletIcon";
 
 const LUXEMBOURG_CENTER = [49.75, 6.15];
 
@@ -27,7 +28,7 @@ export default function MapView({ bags, userPos }) {
         />
         {userPos && <Marker position={[userPos.lat, userPos.lng]} />}
         {merchantList.map((m) => (
-          <Marker key={m.merchantId} position={[m.lat, m.lng]}>
+          <Marker key={m.merchantId} position={[m.lat, m.lng]} icon={merchantMarkerIcon(m.logo_url)}>
             <Popup>
               <b>{m.business_name}</b>
               <br />
