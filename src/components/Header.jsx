@@ -1,8 +1,10 @@
 import { useI18n } from "../lib/i18n.jsx";
 import { logout } from "../lib/auth";
+import { isRegistrationComplete } from "../lib/merchants";
 
-export default function Header({ view, user, onNavigate }) {
+export default function Header({ view, user, merchant, onNavigate }) {
   const { lang, setLang, t } = useI18n();
+  const isMerchant = isRegistrationComplete(merchant);
   return (
     <header>
       <a
@@ -45,13 +47,13 @@ export default function Header({ view, user, onNavigate }) {
         </a>
         <a
           href="#"
-          className="nav-link"
+          className={isMerchant ? "nav-link merchant-badge" : "nav-link"}
           onClick={(e) => {
             e.preventDefault();
             onNavigate(view === "merchant" ? "public" : "merchant");
           }}
         >
-          {t("nav.merchant")}
+          {isMerchant ? `🏪 ${merchant.business_name}` : t("nav.merchant")}
         </a>
         {user && (
           <button className="btn secondary small" onClick={logout}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { LangProvider } from "./lib/i18n.jsx";
 import { getCurrentUser, onAuthChange, consumePendingView } from "./lib/auth";
+import { getMerchantOrNull, isRegistrationComplete } from "./lib/merchants";
 import Header from "./components/Header.jsx";
 import PublicView from "./components/PublicView.jsx";
 import MerchantView from "./components/MerchantView.jsx";
@@ -15,6 +16,15 @@ export default function App() {
   const [legalModal, setLegalModal] = useState(null);
   const [pendingReserveBagId, setPendingReserveBagId] = useState(null);
   const [authError, setAuthError] = useState(null);
+  // undefined = pas encore vérifié, null = pas (encore) commerçant.
+  // Récupéré ici (pas seulement dans MerchantView) pour pouvoir l'afficher
+  // dans le header — sinon rien ne distingue visuellement un commerçant
+  // inscrit d'un client normal une fois connecté.
+  const [merchant, setMerchant] = useState(undefined);
+
+  async function refreshMerchant(userId) {
+    setMerchant(await getMerchantOrNull(userId));
+  }
 
   // Supabase renvoie une erreur (lien expiré, déjà utilisé, scanné/consommé
   // automatiquement par un client email avant le vrai clic...) via le hash
@@ -60,6 +70,11 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (user) refreshMerchant(user.id);
+    else setMerchant(undefined);
+  }, [user]);
+
   // Ouvre directement un document légal via un lien partageable, ex: app.html?legal=cgu
   useEffect(() => {
     const legal = new URLSearchParams(window.location.search).get("legal");
@@ -76,7 +91,7 @@ export default function App() {
   return (
     <LangProvider>
       <div className="wrap">
-        <Header view={view} user={user} onNavigate={setView} />
+        <Header view={view} user={user} merchant={merchant} onNavigate={setView} />
 
         {authError && (
           <div className="panel" style={{ borderColor: "var(--red)", marginBottom: 20 }}>
@@ -91,7 +106,9 @@ export default function App() {
         {view === "public" && (
           <PublicView user={user} pendingReserveBagId={pendingReserveBagId} onPendingReserveHandled={() => setPendingReserveBagId(null)} />
         )}
-        {view === "merchant" && <MerchantView user={user} onOpenLegal={setLegalModal} />}
+        {view === "merchant" && (
+          <MerchantView user={user} merchant={merchant} onMerchantChanged={() => refreshMerchant(user.id)} onOpenLegal={setLegalModal} />
+        )}
         {view === "account" && <AccountView user={user} />}
         {view === "favorites" && <FavoritesView user={user} />}
 

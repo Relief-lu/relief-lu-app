@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
-import { getMerchantOrNull } from "../lib/merchants";
 import { notifyNewBag } from "../lib/notify";
 import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
 import MerchantLogoUpload from "./MerchantLogoUpload.jsx";
@@ -19,13 +18,12 @@ const emptyForm = {
   end: "",
 };
 
-export default function MerchantDashboard({ user }) {
+export default function MerchantDashboard({ user, merchant, onMerchantChanged }) {
   const { t } = useI18n();
   const [form, setForm] = useState(emptyForm);
   const [photo, setPhoto] = useState(null);
   const [msg, setMsg] = useState(null);
   const [myBags, setMyBags] = useState([]);
-  const [merchant, setMerchant] = useState(null);
   const [statsKey, setStatsKey] = useState(0);
 
   async function refreshMyBags() {
@@ -35,7 +33,6 @@ export default function MerchantDashboard({ user }) {
 
   useEffect(() => {
     refreshMyBags();
-    getMerchantOrNull(user.id).then(setMerchant);
   }, [user.id]);
 
   function set(field, value) {
@@ -85,7 +82,7 @@ export default function MerchantDashboard({ user }) {
         <MerchantStats merchantId={user.id} refreshKey={statsKey} />
       </div>
 
-      {merchant && <MerchantLogoUpload user={user} merchant={merchant} onUpdated={(logo_url) => setMerchant((m) => ({ ...m, logo_url }))} />}
+      {merchant && <MerchantLogoUpload user={user} merchant={merchant} onUpdated={onMerchantChanged} />}
       {merchant && <MerchantLocationPicker user={user} merchant={merchant} />}
 
       <div className="panel">
