@@ -1,18 +1,32 @@
 import { useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
-import { sendMagicLink, getErrorMessage } from "../lib/auth";
+import { sendMagicLink, verifyOtpCode, getErrorMessage } from "../lib/auth";
 
 // Formulaire de connexion par magic link, réutilisé partout où un compte
-// consommateur est requis (réservation, historique, favoris).
+// consommateur est requis (réservation, historique, favoris). Propose aussi
+// le code reçu par email comme alternative — le lien ouvre presque toujours
+// un NOUVEL onglet (comportement de l'appli Mail), ce qui perd le contexte
+// de la vue en cours ; taper le code garde tout dans le même onglet.
 export default function AuthPrompt({ title, description, view }) {
   const { t } = useI18n();
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [sent, setSent] = useState(false);
   const [msg, setMsg] = useState(null);
 
   async function handleSend() {
     try {
       await sendMagicLink(email.trim(), view);
+      setSent(true);
       setMsg({ type: "success", text: t("account.linkSent") });
+    } catch (err) {
+      setMsg({ type: "error", text: getErrorMessage(err) });
+    }
+  }
+
+  async function handleVerifyCode() {
+    try {
+      await verifyOtpCode(email.trim(), code.trim());
     } catch (err) {
       setMsg({ type: "error", text: getErrorMessage(err) });
     }
@@ -30,6 +44,15 @@ export default function AuthPrompt({ title, description, view }) {
         {t("account.sendLink")}
       </button>
       {msg && <p className={msg.type === "error" ? "error-msg" : "success-msg"}>{msg.text}</p>}
+      {sent && (
+        <div className="field" style={{ marginTop: 18 }}>
+          <label>{t("account.codeLabel")}</label>
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="123456" inputMode="numeric" />
+          <button className="btn secondary small" style={{ marginTop: 8 }} onClick={handleVerifyCode}>
+            {t("account.verifyCode")}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
