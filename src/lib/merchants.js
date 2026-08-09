@@ -18,3 +18,15 @@ export async function updateMerchantLocation(userId, lat, lng) {
   const { error } = await supabase.from("merchants").update({ lat, lng }).eq("id", userId);
   if (error) throw error;
 }
+
+// Réutilise le bucket "bag-photos" (déjà public, déjà autorisé en écriture
+// pour les commerçants connectés) plutôt que d'en créer un dédié.
+export async function uploadMerchantLogo(userId, file) {
+  const path = `${userId}/logo-${Date.now()}-${file.name}`;
+  const { error } = await supabase.storage.from("bag-photos").upload(path, file);
+  if (error) throw error;
+  const logo_url = supabase.storage.from("bag-photos").getPublicUrl(path).data.publicUrl;
+  const { error: updateError } = await supabase.from("merchants").update({ logo_url }).eq("id", userId);
+  if (updateError) throw updateError;
+  return logo_url;
+}

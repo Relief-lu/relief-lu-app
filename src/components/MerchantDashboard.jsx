@@ -4,6 +4,7 @@ import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
 import { getMerchant } from "../lib/merchants";
 import { notifyNewBag } from "../lib/notify";
 import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
+import MerchantLogoUpload from "./MerchantLogoUpload.jsx";
 import MerchantStats from "./MerchantStats.jsx";
 import MerchantBagRow from "./MerchantBagRow.jsx";
 
@@ -82,6 +83,7 @@ export default function MerchantDashboard({ user }) {
         <MerchantStats merchantId={user.id} refreshKey={statsKey} />
       </div>
 
+      {merchant && <MerchantLogoUpload user={user} merchant={merchant} onUpdated={(logo_url) => setMerchant((m) => ({ ...m, logo_url }))} />}
       {merchant && <MerchantLocationPicker user={user} merchant={merchant} />}
 
       <div className="panel">

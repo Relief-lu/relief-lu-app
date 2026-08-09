@@ -3,7 +3,7 @@ import { supabase } from "./supabase";
 export async function loadActiveBags() {
   const { data, error } = await supabase
     .from("bags")
-    .select("*, merchants(business_name, city, lat, lng)")
+    .select("*, merchants(business_name, city, lat, lng, logo_url)")
     .eq("status", "active")
     .gt("quantity_left", 0)
     .order("created_at", { ascending: false });

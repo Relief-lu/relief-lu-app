@@ -37,6 +37,11 @@ export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, 
     <div className="card">
       <div className="thumb" style={bag.image_url ? { backgroundImage: `url('${bag.image_url}')` } : undefined}>
         {!bag.image_url && "🥡"}
+        {bag.merchants?.logo_url && (
+          <div className="merchant-logo">
+            <img src={bag.merchants.logo_url} alt="" />
+          </div>
+        )}
         {onToggleFavorite && (
           <button
             className={`favorite-btn ${isFavorite ? "active" : ""}`}
