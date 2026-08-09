@@ -1,7 +1,10 @@
-const CACHE = "relief-lu-v1";
+// v2 : force l'invalidation du cache "cache-first" de v1, qui servait une
+// version figée de l'app indéfiniment (voir le fetch handler ci-dessous).
+const CACHE = "relief-lu-v2";
 const ASSETS = [
   "./",
   "./index.html",
+  "./app.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png"
@@ -24,8 +27,30 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const req = event.request;
+  const isHTML = req.mode === "navigate" || req.headers.get("accept")?.includes("text/html");
+
+  if (isHTML) {
+    // Réseau en priorité pour les pages HTML : index.html/app.html ne sont pas
+    // hashées par le build, donc une réponse mise en cache une fois serait
+    // resservie pour toujours — une PWA installée ne verrait jamais les mises
+    // à jour. On ne retombe sur le cache qu'en cas d'échec réseau (hors-ligne).
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(req, copy));
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // Le reste (JS/CSS hashés par le build, icônes...) : sûr à servir depuis le
+  // cache en priorité, le nom de fichier change si le contenu change.
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    caches.match(req).then((cached) => cached || fetch(req))
   );
 });
 
