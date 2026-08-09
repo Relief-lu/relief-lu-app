@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LangProvider } from "./lib/i18n.jsx";
-import { getCurrentUser, onAuthChange } from "./lib/auth";
+import { getCurrentUser, onAuthChange, consumePendingView } from "./lib/auth";
 import Header from "./components/Header.jsx";
 import PublicView from "./components/PublicView.jsx";
 import MerchantView from "./components/MerchantView.jsx";
@@ -15,10 +15,20 @@ export default function App() {
   const [legalModal, setLegalModal] = useState(null);
 
   useEffect(() => {
-    getCurrentUser().then(setUser);
+    // Restaure la vue d'où la demande de lien magique est partie (espace
+    // commerçant, favoris, compte) — sinon on retombe sur "public" après
+    // le clic, puisque la vue n'est qu'un state React, pas dans l'URL.
+    function handleUser(u) {
+      setUser(u);
+      if (u) {
+        const pendingView = consumePendingView();
+        if (pendingView) setView(pendingView);
+      }
+    }
+    getCurrentUser().then(handleUser);
     const {
       data: { subscription },
-    } = onAuthChange(setUser);
+    } = onAuthChange(handleUser);
     return () => subscription.unsubscribe();
   }, []);
 

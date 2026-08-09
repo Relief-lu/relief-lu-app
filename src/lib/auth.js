@@ -1,13 +1,27 @@
 import { supabase } from "./supabase";
 
+// La vue (public/merchant/account/favorites) n'est jamais reflétée dans l'URL
+// (juste un state React) — sans ça, le clic sur le lien magique recharge la
+// page et retombe toujours sur la vue par défaut, même si la demande venait
+// de l'espace commerçant ou de la page favoris.
+const PENDING_VIEW_KEY = "relief-pending-view";
+
 // Envoie un lien de connexion par email — pas de mot de passe à gérer.
 // Utilisé pour les commerçants comme pour les acheteurs (même mécanisme).
-export async function sendMagicLink(email) {
+// `view` (optionnel) : la vue à restaurer après le clic sur le lien.
+export async function sendMagicLink(email, view) {
+  if (view) localStorage.setItem(PENDING_VIEW_KEY, view);
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: { emailRedirectTo: window.location.href },
   });
   if (error) throw error;
+}
+
+export function consumePendingView() {
+  const view = localStorage.getItem(PENDING_VIEW_KEY);
+  localStorage.removeItem(PENDING_VIEW_KEY);
+  return view;
 }
 
 // Alternative au clic sur le lien : saisir le code reçu par email. Utile en

@@ -4,14 +4,14 @@ import { sendMagicLink } from "../lib/auth";
 
 // Formulaire de connexion par magic link, réutilisé partout où un compte
 // consommateur est requis (réservation, historique, favoris).
-export default function AuthPrompt({ title, description }) {
+export default function AuthPrompt({ title, description, view }) {
   const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState(null);
 
   async function handleSend() {
     try {
-      await sendMagicLink(email.trim());
+      await sendMagicLink(email.trim(), view);
       setMsg({ type: "success", text: t("account.linkSent") });
     } catch (err) {
       setMsg({ type: "error", text: err.message });

@@ -28,7 +28,7 @@ export default function FavoritesView({ user }) {
       <h1 className="page-title">{t("nav.favorites")}</h1>
       {!user ? (
         <div className="panel">
-          <AuthPrompt />
+          <AuthPrompt view="favorites" />
         </div>
       ) : bags === null ? (
         <p className="page-sub">{t("public.loading")}</p>

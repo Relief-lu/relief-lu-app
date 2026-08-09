@@ -23,7 +23,7 @@ export default function AccountView({ user }) {
       <h1 className="page-title">{t("account.title")}</h1>
       {!user ? (
         <div className="panel">
-          <AuthPrompt />
+          <AuthPrompt view="account" />
         </div>
       ) : reservations === null ? (
         <p className="page-sub">{t("public.loading")}</p>

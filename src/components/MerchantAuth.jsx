@@ -9,7 +9,7 @@ export default function MerchantAuth() {
 
   async function handleSend() {
     try {
-      await sendMagicLink(email.trim());
+      await sendMagicLink(email.trim(), "merchant");
       setMsg({ type: "success", text: "Lien envoyé — vérifie ta boîte mail." });
     } catch (err) {
       setMsg({ type: "error", text: err.message });
