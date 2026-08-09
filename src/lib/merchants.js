@@ -1,15 +1,12 @@
 import { supabase } from "./supabase";
 
-// À appeler une fois après connexion : crée la ligne merchant si elle n'existe pas encore.
-export async function ensureMerchantRow(user) {
-  const { data } = await supabase.from("merchants").select("id").eq("id", user.id).maybeSingle();
-  if (!data) {
-    await supabase.from("merchants").insert({ id: user.id, business_name: user.email.split("@")[0] });
-  }
-}
-
-export async function getMerchant(userId) {
-  const { data, error } = await supabase.from("merchants").select("*").eq("id", userId).single();
+// Ne crée plus de fiche commerçant juste en visitant "Espace commerçant" —
+// n'importe quel compte client qui jetait un œil sur cette section devenait
+// silencieusement commerçant, ce qui mélangeait les deux rôles. La fiche
+// n'existe désormais qu'une fois le formulaire d'inscription soumis
+// (voir updateMerchantProfile, qui fait l'upsert).
+export async function getMerchantOrNull(userId) {
+  const { data, error } = await supabase.from("merchants").select("*").eq("id", userId).maybeSingle();
   if (error) throw error;
   return data;
 }
@@ -25,17 +22,17 @@ export function isRegistrationComplete(merchant) {
   return Boolean(merchant?.address);
 }
 
+// Crée la fiche commerçant au premier enregistrement, la met à jour ensuite —
+// c'est le seul endroit qui crée une ligne dans "merchants".
 export async function updateMerchantProfile(userId, profile) {
-  const { error } = await supabase
-    .from("merchants")
-    .update({
-      business_name: profile.business_name,
-      address: profile.address,
-      city: profile.city,
-      phone: profile.phone,
-      registration_number: profile.registration_number,
-    })
-    .eq("id", userId);
+  const { error } = await supabase.from("merchants").upsert({
+    id: userId,
+    business_name: profile.business_name,
+    address: profile.address,
+    city: profile.city,
+    phone: profile.phone,
+    registration_number: profile.registration_number,
+  });
   if (error) throw error;
 }
 

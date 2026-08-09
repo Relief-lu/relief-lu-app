@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
-import { getMerchant } from "../lib/merchants";
+import { getMerchantOrNull } from "../lib/merchants";
 import { notifyNewBag } from "../lib/notify";
 import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
 import MerchantLogoUpload from "./MerchantLogoUpload.jsx";
@@ -35,7 +35,7 @@ export default function MerchantDashboard({ user }) {
 
   useEffect(() => {
     refreshMyBags();
-    getMerchant(user.id).then(setMerchant);
+    getMerchantOrNull(user.id).then(setMerchant);
   }, [user.id]);
 
   function set(field, value) {
