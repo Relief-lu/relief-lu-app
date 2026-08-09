@@ -54,6 +54,15 @@
     font-family:'Work Sans', sans-serif; font-size:13px; width:100%;
   }
   .city-search input::placeholder{color:var(--paper-dim);}
+  .city-search-locate{
+    background:none; border:none; color:var(--honey); cursor:pointer;
+    display:flex; align-items:center; padding:2px; flex-shrink:0;
+  }
+  .city-search-locate:hover{color:#f0b862;}
+  .city-search-locate[disabled]{opacity:0.5; cursor:default;}
+  .city-search-msg{
+    font-size:12px; color:#D9694F; margin-top:6px; display:none;
+  }
   .langs{display:flex; gap:6px; background:var(--navy-2); padding:4px; border-radius:100px;}
   .langs button{
     background:none; border:none; color:var(--paper-dim); cursor:pointer;
@@ -222,6 +231,9 @@
       <form class="city-search" id="city-search-form">
         <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <input type="text" id="city-search-input" data-i18n-placeholder="citySearch.placeholder" placeholder="Nourriture à proximité…">
+        <button type="button" id="city-search-locate" class="city-search-locate" aria-label="Utiliser ma position">
+          <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
       </form>
       <div class="head-right">
         <div class="langs">
@@ -316,6 +328,9 @@
       "sub": "Relief redonne de la valeur à la nourriture qui allait être jetée — boulangeries, restaurants, épiceries, traiteurs — pour que chaque euro compte un peu moins fort.",
       "capture.placeholder": "ton-email@exemple.lu",
       "citySearch.placeholder": "Nourriture à proximité…",
+      "citySearch.unsupported": "Géolocalisation non disponible sur cet appareil.",
+      "citySearch.denied": "Localisation refusée ou indisponible.",
+      "citySearch.notFound": "Ville introuvable, réessaie avec un autre nom.",
       "capture.button": "Je veux être prévenu·e",
       "capture.note": "Zéro spam. Un seul message, le jour où c'est prêt.",
       "thanks.done": "✓ Merci — tu seras prévenu·e au lancement.",
@@ -348,6 +363,9 @@
       "sub": "Relief bringt Lebensmittel, die sonst weggeworfen würden, zurück in Umlauf — Bäckereien, Restaurants, Lebensmittelgeschäfte, Caterer — damit jeder Euro etwas mehr zählt.",
       "capture.placeholder": "deine-email@beispiel.lu",
       "citySearch.placeholder": "Essen in deiner Nähe…",
+      "citySearch.unsupported": "Standortbestimmung auf diesem Gerät nicht verfügbar.",
+      "citySearch.denied": "Standortzugriff verweigert oder nicht verfügbar.",
+      "citySearch.notFound": "Stadt nicht gefunden, versuche einen anderen Namen.",
       "capture.button": "Ich möchte benachrichtigt werden",
       "capture.note": "Kein Spam. Nur eine Nachricht, am Tag des Starts.",
       "thanks.done": "✓ Danke — du wirst beim Start benachrichtigt.",
@@ -380,6 +398,9 @@
       "sub": "Relief brings back into circulation food that was going to be thrown away — bakeries, restaurants, grocery stores, caterers — so every euro counts a little less hard.",
       "capture.placeholder": "your-email@example.lu",
       "citySearch.placeholder": "Food nearby…",
+      "citySearch.unsupported": "Geolocation isn't available on this device.",
+      "citySearch.denied": "Location access denied or unavailable.",
+      "citySearch.notFound": "City not found, try another name.",
       "capture.button": "Notify me",
       "capture.note": "Zero spam. One message, the day it's ready.",
       "thanks.done": "✓ Thanks — you'll be notified at launch.",
@@ -438,13 +459,56 @@
   const thanks = document.getElementById('thanks');
   const emailInput = document.getElementById('capture-email');
 
-  // Pas encore de sachets publiés — la recherche de ville redirige vers
-  // l'inscription à la liste d'attente plutôt que vers des résultats vides.
+  // Recherche géographique : géolocalisation du navigateur, ou géocodage de la
+  // ville tapée (via Nominatim/OpenStreetMap, déjà utilisé pour les cartes de
+  // l'app). La position est stockée sous la même clé que l'app React
+  // (lib/geolocation.js) pour qu'elle soit déjà appliquée à l'arrivée sur
+  // app.html — même si aucun sachet n'est encore publié, le tri par distance
+  // et "près de moi" fonctionneront dès qu'il y en aura.
+  const POSITION_KEY = 'relief-user-position';
   const citySearchForm = document.getElementById('city-search-form');
-  citySearchForm.addEventListener('submit', function(e){
+  const citySearchInput = document.getElementById('city-search-input');
+  const citySearchLocate = document.getElementById('city-search-locate');
+  const citySearchMsg = document.createElement('div');
+  citySearchMsg.className = 'city-search-msg';
+  citySearchForm.after(citySearchMsg);
+
+  function showSearchError(text){
+    citySearchMsg.textContent = text;
+    citySearchMsg.style.display = 'block';
+  }
+
+  function goToApp(pos){
+    localStorage.setItem(POSITION_KEY, JSON.stringify(pos));
+    window.location.href = 'app.html';
+  }
+
+  citySearchLocate.addEventListener('click', function(){
+    if (!navigator.geolocation) {
+      showSearchError(t('citySearch.unsupported'));
+      return;
+    }
+    citySearchLocate.disabled = true;
+    navigator.geolocation.getCurrentPosition(
+      function(p){ goToApp({ lat: p.coords.latitude, lng: p.coords.longitude }); },
+      function(){ citySearchLocate.disabled = false; showSearchError(t('citySearch.denied')); },
+      { timeout: 8000 }
+    );
+  });
+
+  citySearchForm.addEventListener('submit', async function(e){
     e.preventDefault();
-    document.getElementById('capture-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    emailInput.focus();
+    const query = citySearchInput.value.trim();
+    if (!query) return;
+    citySearchMsg.style.display = 'none';
+    try {
+      const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=lu&q=' + encodeURIComponent(query));
+      const results = await res.json();
+      if (!results.length) { showSearchError(t('citySearch.notFound')); return; }
+      goToApp({ lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) });
+    } catch {
+      showSearchError(t('citySearch.notFound'));
+    }
   });
 
   form.addEventListener('submit', async function(e){
