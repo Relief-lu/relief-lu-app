@@ -35,17 +35,25 @@
   /* header */
   header{
     display:flex; align-items:center; justify-content:space-between;
-    padding:30px 0;
+    padding:30px 0; gap:14px; flex-wrap:wrap;
   }
   .logo{
     font-family:'Fraunces', serif; font-weight:680; font-size:22px;
-    letter-spacing:0.5px; color:var(--paper);
+    letter-spacing:0.5px; color:var(--paper); text-decoration:none;
   }
   .logo .dot{color:var(--honey);}
-  .locale{
-    font-family:'IBM Plex Mono', monospace; font-size:13px;
-    color:var(--paper-dim); border:1px solid rgba(239,230,211,0.25);
+  .head-right{display:flex; align-items:center; gap:12px;}
+  .langs{display:flex; gap:6px; background:var(--navy-2); padding:4px; border-radius:100px;}
+  .langs button{
+    background:none; border:none; color:var(--paper-dim); cursor:pointer;
+    font-family:'Work Sans', sans-serif; font-size:13px; font-weight:600;
     padding:6px 12px; border-radius:100px;
+  }
+  .langs button.active{background:var(--honey); color:var(--navy);}
+  .open-app{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600;
+    color:var(--navy); background:var(--honey); text-decoration:none;
+    padding:9px 16px; border-radius:100px;
   }
 
   /* hero */
@@ -193,60 +201,67 @@
   <div class="wrap">
     <header>
       <div class="logo">relief<span class="dot">.lu</span></div>
-      <div class="locale">🇱🇺 FR</div>
+      <div class="head-right">
+        <div class="langs">
+          <button data-lang="fr" class="active">FR</button>
+          <button data-lang="de">DE</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a href="app.html" class="open-app" data-i18n="nav.openApp">Voir l'app</a>
+      </div>
     </header>
 
     <section class="hero">
-      <div class="eyebrow">Arrive à la rentrée</div>
-      <h1>Le Luxembourg est l'un des pays les plus riches du monde. <em>Ce n'est pas le cas pour tout le monde.</em></h1>
-      <p class="sub">Relief redonne de la valeur à la nourriture qui allait être jetée — boulangeries, restaurants, épiceries, traiteurs — pour que chaque euro compte un peu moins fort.</p>
+      <div class="eyebrow" data-i18n="eyebrow">Arrive à la rentrée</div>
+      <h1><span data-i18n="h1.part1">Le Luxembourg est l'un des pays les plus riches du monde.</span> <em data-i18n="h1.part2">Ce n'est pas le cas pour tout le monde.</em></h1>
+      <p class="sub" data-i18n="sub">Relief redonne de la valeur à la nourriture qui allait être jetée — boulangeries, restaurants, épiceries, traiteurs — pour que chaque euro compte un peu moins fort.</p>
 
       <form class="capture" id="capture-form">
-        <input type="email" id="capture-email" placeholder="ton-email@exemple.lu" required>
-        <button type="submit">Je veux être prévenu·e</button>
+        <input type="email" id="capture-email" data-i18n-placeholder="capture.placeholder" placeholder="ton-email@exemple.lu" required>
+        <button type="submit" data-i18n="capture.button">Je veux être prévenu·e</button>
       </form>
-      <div class="thanks" id="thanks">✓ Merci — tu seras prévenu·e au lancement.</div>
-      <div class="capture-note">Zéro spam. Un seul message, le jour où c'est prêt.</div>
+      <div class="thanks" id="thanks"></div>
+      <div class="capture-note" data-i18n="capture.note">Zéro spam. Un seul message, le jour où c'est prêt.</div>
     </section>
 
     <section class="tickets">
       <div class="ticket">
         <div class="num">1 / 7</div>
-        <div class="label">résident·es du Luxembourg vivent avec un risque de pauvreté au quotidien</div>
+        <div class="label" data-i18n="ticket1.label">résident·es du Luxembourg vivent avec un risque de pauvreté au quotidien</div>
         <div class="rule"></div>
         <span class="src">STATEC, 2025</span>
       </div>
       <div class="ticket">
         <div class="num">×3</div>
-        <div class="label">c'est le risque de pauvreté d'un·e locataire par rapport à un·e propriétaire</div>
+        <div class="label" data-i18n="ticket2.label">c'est le risque de pauvreté d'un·e locataire par rapport à un·e propriétaire</div>
         <div class="rule"></div>
         <span class="src">STATEC — 29,7% vs 10,3%</span>
       </div>
       <div class="ticket">
         <div class="num">60%</div>
-        <div class="label">du revenu englouti dans le logement, pour les ménages les plus modestes</div>
+        <div class="label" data-i18n="ticket3.label">du revenu englouti dans le logement, pour les ménages les plus modestes</div>
         <div class="rule"></div>
         <span class="src">STATEC, 2025</span>
       </div>
     </section>
 
     <section class="mission">
-      <h2>On ne parle pas de climat. On parle de ceux pour qui chaque course compte.</h2>
-      <p>Chaque jour, des entreprises et des commerces luxembourgeois jettent de la nourriture encore bonne. Relief la remet en circulation, à prix réduit, pour celles et ceux qui en ont vraiment besoin — sans discours, sans jugement, juste un coup de pouce concret.</p>
+      <h2 data-i18n="mission.title">On ne parle pas de climat. On parle de ceux pour qui chaque course compte.</h2>
+      <p data-i18n="mission.text">Chaque jour, des entreprises et des commerces luxembourgeois jettent de la nourriture encore bonne. Relief la remet en circulation, à prix réduit, pour celles et ceux qui en ont vraiment besoin — sans discours, sans jugement, juste un coup de pouce concret.</p>
     </section>
 
     <section class="how">
-      <div class="how-eyebrow">Comment ça marche</div>
+      <div class="how-eyebrow" data-i18n="how.eyebrow">Comment ça marche</div>
       <div class="steps">
         <div class="step">
-          <div class="tag">Les commerçants</div>
-          <h3>Ils publient leurs invendus du jour</h3>
-          <p>Boulangeries, restaurants, épiceries, traiteurs annoncent leurs surplus à prix réduit en quelques clics, avec un créneau de retrait.</p>
+          <div class="tag" data-i18n="step1.tag">Les commerçants</div>
+          <h3 data-i18n="step1.title">Ils publient leurs invendus du jour</h3>
+          <p data-i18n="step1.text">Boulangeries, restaurants, épiceries, traiteurs annoncent leurs surplus à prix réduit en quelques clics, avec un créneau de retrait.</p>
         </div>
         <div class="step">
-          <div class="tag">Toi</div>
-          <h3>Tu réserves, tu récupères</h3>
-          <p>Réservation en 2 minutes sur l'app, retrait sur place au créneau fixé.</p>
+          <div class="tag" data-i18n="step2.tag">Toi</div>
+          <h3 data-i18n="step2.title">Tu réserves, tu récupères</h3>
+          <p data-i18n="step2.text">Réservation en 2 minutes sur l'app, retrait sur place au créneau fixé.</p>
         </div>
       </div>
     </section>
@@ -254,9 +269,9 @@
     <footer>
       <div class="foot-logo">relief<span style="color:var(--honey)">.lu</span></div>
       <div class="foot-links">
-        <a href="app.html?legal=mentions">Mentions légales</a>
-        <a href="app.html?legal=cgu">CGU</a>
-        <a href="app.html?legal=confidentialite">Confidentialité</a>
+        <a href="app.html?legal=mentions" data-i18n="footer.mentions">Mentions légales</a>
+        <a href="app.html?legal=cgu" data-i18n="footer.cgu">CGU</a>
+        <a href="app.html?legal=confidentialite" data-i18n="footer.confidentialite">Confidentialité</a>
         <a href="#" id="link-ig" class="social-icon" aria-label="Instagram">
           <svg viewBox="0 0 48 48" width="26" height="26"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset="0.05" stop-color="#fdf497"/><stop offset="0.45" stop-color="#fd5949"/><stop offset="0.6" stop-color="#d6249f"/><stop offset="0.9" stop-color="#285AEB"/></radialGradient></defs><rect width="48" height="48" rx="12" fill="url(#ig-grad)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="31.6" cy="16.4" r="1.6" fill="#fff"/></svg>
         </a>
@@ -269,6 +284,114 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+  const I18N = {
+    fr: {
+      "eyebrow": "Arrive à la rentrée",
+      "h1.part1": "Le Luxembourg est l'un des pays les plus riches du monde.",
+      "h1.part2": "Ce n'est pas le cas pour tout le monde.",
+      "sub": "Relief redonne de la valeur à la nourriture qui allait être jetée — boulangeries, restaurants, épiceries, traiteurs — pour que chaque euro compte un peu moins fort.",
+      "capture.placeholder": "ton-email@exemple.lu",
+      "capture.button": "Je veux être prévenu·e",
+      "capture.note": "Zéro spam. Un seul message, le jour où c'est prêt.",
+      "thanks.done": "✓ Merci — tu seras prévenu·e au lancement.",
+      "thanks.exists": "✓ Tu es déjà inscrit·e — à très vite.",
+      "thanks.error": "Un souci est survenu, réessaie dans un instant.",
+      "thanks.demo": "✓ Merci — (mode démo, l'email n'est pas encore enregistré : configure Supabase).",
+      "ticket1.label": "résident·es du Luxembourg vivent avec un risque de pauvreté au quotidien",
+      "ticket2.label": "c'est le risque de pauvreté d'un·e locataire par rapport à un·e propriétaire",
+      "ticket3.label": "du revenu englouti dans le logement, pour les ménages les plus modestes",
+      "mission.title": "On ne parle pas de climat. On parle de ceux pour qui chaque course compte.",
+      "mission.text": "Chaque jour, des entreprises et des commerces luxembourgeois jettent de la nourriture encore bonne. Relief la remet en circulation, à prix réduit, pour celles et ceux qui en ont vraiment besoin — sans discours, sans jugement, juste un coup de pouce concret.",
+      "how.eyebrow": "Comment ça marche",
+      "step1.tag": "Les commerçants",
+      "step1.title": "Ils publient leurs invendus du jour",
+      "step1.text": "Boulangeries, restaurants, épiceries, traiteurs annoncent leurs surplus à prix réduit en quelques clics, avec un créneau de retrait.",
+      "step2.tag": "Toi",
+      "step2.title": "Tu réserves, tu récupères",
+      "step2.text": "Réservation en 2 minutes sur l'app, retrait sur place au créneau fixé.",
+      "footer.mentions": "Mentions légales",
+      "footer.cgu": "CGU",
+      "footer.confidentialite": "Confidentialité",
+      "nav.openApp": "Voir l'app",
+    },
+    de: {
+      "eyebrow": "Startet zum Schulanfang",
+      "h1.part1": "Luxemburg ist eines der reichsten Länder der Welt.",
+      "h1.part2": "Das gilt nicht für alle.",
+      "sub": "Relief bringt Lebensmittel, die sonst weggeworfen würden, zurück in Umlauf — Bäckereien, Restaurants, Lebensmittelgeschäfte, Caterer — damit jeder Euro etwas mehr zählt.",
+      "capture.placeholder": "deine-email@beispiel.lu",
+      "capture.button": "Ich möchte benachrichtigt werden",
+      "capture.note": "Kein Spam. Nur eine Nachricht, am Tag des Starts.",
+      "thanks.done": "✓ Danke — du wirst beim Start benachrichtigt.",
+      "thanks.exists": "✓ Du bist bereits angemeldet — bis bald.",
+      "thanks.error": "Etwas ist schiefgelaufen, versuch es gleich noch einmal.",
+      "thanks.demo": "✓ Danke — (Demo-Modus, die E-Mail wurde noch nicht gespeichert: Supabase konfigurieren).",
+      "ticket1.label": "Einwohner:innen Luxemburgs leben mit einem täglichen Armutsrisiko",
+      "ticket2.label": "so hoch ist das Armutsrisiko von Mieter:innen im Vergleich zu Eigentümer:innen",
+      "ticket3.label": "des Einkommens verschlingt das Wohnen bei den ärmsten Haushalten",
+      "mission.title": "Wir reden nicht über das Klima. Wir reden über die, für die jeder Einkauf zählt.",
+      "mission.text": "Jeden Tag werfen luxemburgische Unternehmen und Geschäfte noch genießbare Lebensmittel weg. Relief bringt sie zu reduzierten Preisen zurück in Umlauf, für alle, die es wirklich brauchen — ohne Vortrag, ohne Urteil, einfach eine konkrete Hilfe.",
+      "how.eyebrow": "So funktioniert's",
+      "step1.tag": "Die Geschäfte",
+      "step1.title": "Sie veröffentlichen ihre Reste des Tages",
+      "step1.text": "Bäckereien, Restaurants, Lebensmittelgeschäfte und Caterer melden ihre Überschüsse zu reduzierten Preisen in wenigen Klicks, mit einem Abholzeitraum.",
+      "step2.tag": "Du",
+      "step2.title": "Du reservierst, du holst ab",
+      "step2.text": "Reservierung in 2 Minuten über die App, Abholung vor Ort im festgelegten Zeitfenster.",
+      "footer.mentions": "Impressum",
+      "footer.cgu": "AGB",
+      "footer.confidentialite": "Datenschutz",
+      "nav.openApp": "App öffnen",
+    },
+    en: {
+      "eyebrow": "Launching this fall",
+      "h1.part1": "Luxembourg is one of the richest countries in the world.",
+      "h1.part2": "That's not true for everyone.",
+      "sub": "Relief brings back into circulation food that was going to be thrown away — bakeries, restaurants, grocery stores, caterers — so every euro counts a little less hard.",
+      "capture.placeholder": "your-email@example.lu",
+      "capture.button": "Notify me",
+      "capture.note": "Zero spam. One message, the day it's ready.",
+      "thanks.done": "✓ Thanks — you'll be notified at launch.",
+      "thanks.exists": "✓ You're already signed up — see you soon.",
+      "thanks.error": "Something went wrong, try again in a moment.",
+      "thanks.demo": "✓ Thanks — (demo mode, the email isn't stored yet: configure Supabase).",
+      "ticket1.label": "residents of Luxembourg live with a daily risk of poverty",
+      "ticket2.label": "the poverty risk of a renter compared to an owner",
+      "ticket3.label": "of income spent on housing, for the poorest households",
+      "mission.title": "We're not talking about climate. We're talking about people for whom every grocery run counts.",
+      "mission.text": "Every day, Luxembourg businesses and shops throw away food that's still good. Relief brings it back into circulation, at a reduced price, for those who really need it — no lecture, no judgment, just concrete help.",
+      "how.eyebrow": "How it works",
+      "step1.tag": "Merchants",
+      "step1.title": "They publish today's surplus",
+      "step1.text": "Bakeries, restaurants, grocery stores and caterers announce their surplus at a reduced price in a few clicks, with a pickup window.",
+      "step2.tag": "You",
+      "step2.title": "You reserve, you pick up",
+      "step2.text": "Reservation in 2 minutes on the app, pickup on site within the set window.",
+      "footer.mentions": "Legal notice",
+      "footer.cgu": "Terms",
+      "footer.confidentialite": "Privacy",
+      "nav.openApp": "Open the app",
+    },
+  };
+  let LANG = "fr";
+  function t(key){ return (I18N[LANG] && I18N[LANG][key]) || key; }
+  function applyI18n(){
+    document.documentElement.lang = LANG;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      el.placeholder = t(el.getAttribute("data-i18n-placeholder"));
+    });
+    document.querySelectorAll(".langs button").forEach(b => {
+      b.classList.toggle("active", b.dataset.lang === LANG);
+    });
+  }
+  document.querySelectorAll(".langs button").forEach(b => {
+    b.addEventListener("click", () => { LANG = b.dataset.lang; applyI18n(); });
+  });
+  applyI18n();
+
   // 1. Dans Supabase → Project Settings → API, copie "Project URL" et la clé "anon public".
   // 2. Colle-les ci-dessous. La clé "anon" est faite pour être publique côté client
   //    (la sécurité vient de la policy RLS créée par supabase-setup.sql, pas du secret de la clé).
@@ -290,7 +413,7 @@
     if (!sb) {
       console.warn('Supabase non configuré — voir les constantes SUPABASE_URL / SUPABASE_ANON_KEY en haut de ce script.');
       form.style.display = 'none';
-      thanks.textContent = "✓ Merci — (mode démo, l'email n'est pas encore enregistré : configure Supabase).";
+      thanks.textContent = t('thanks.demo');
       thanks.style.display = 'block';
       return;
     }
@@ -302,18 +425,14 @@
 
     if (error) {
       button.disabled = false;
-      button.textContent = "Je veux être prévenu·e";
-      if (error.code === '23505') {
-        thanks.textContent = "✓ Tu es déjà inscrit·e — à très vite.";
-      } else {
-        thanks.textContent = "Un souci est survenu, réessaie dans un instant.";
-      }
+      button.textContent = t('capture.button');
+      thanks.textContent = error.code === '23505' ? t('thanks.exists') : t('thanks.error');
       thanks.style.display = 'block';
       return;
     }
 
     form.style.display = 'none';
-    thanks.textContent = "✓ Merci — tu seras prévenu·e au lancement.";
+    thanks.textContent = t('thanks.done');
     thanks.style.display = 'block';
   });
 
