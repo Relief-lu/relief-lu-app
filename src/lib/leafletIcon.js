@@ -23,3 +23,14 @@ export function merchantMarkerIcon(logoUrl) {
     popupAnchor: [0, -40],
   });
 }
+
+// Simple point rouge pour la position de l'utilisateur — distinct des ronds
+// à logo des commerçants, pas de forme "épingle" qui prête à confusion.
+export function userLocationIcon() {
+  return L.divIcon({
+    className: "user-location-marker",
+    html: `<div class="user-location-dot"></div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+  });
+}

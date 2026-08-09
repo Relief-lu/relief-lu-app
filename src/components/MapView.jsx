@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useI18n } from "../lib/i18n.jsx";
-import { merchantMarkerIcon } from "../lib/leafletIcon";
+import { merchantMarkerIcon, userLocationIcon } from "../lib/leafletIcon";
 
 const LUXEMBOURG_CENTER = [49.75, 6.15];
 
@@ -26,7 +26,7 @@ export default function MapView({ bags, userPos }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {userPos && <Marker position={[userPos.lat, userPos.lng]} />}
+        {userPos && <Marker position={[userPos.lat, userPos.lng]} icon={userLocationIcon()} />}
         {merchantList.map((m) => (
           <Marker key={m.merchantId} position={[m.lat, m.lng]} icon={merchantMarkerIcon(m.logo_url)}>
             <Popup>
