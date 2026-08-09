@@ -119,8 +119,6 @@ const DICT = {
     "nav.merchantModeLabel": "Mode commerçant",
     "nav.viewAsCustomer": "Voir comme client",
     "nav.manageMyShop": "Gérer mon commerce",
-    "account.codeLabel": "Ou entre le code reçu par email",
-    "account.verifyCode": "Valider le code",
   },
   de: {
     "nav.merchant": "Registrieren Sie Ihr Geschäft",
@@ -240,8 +238,6 @@ const DICT = {
     "nav.merchantModeLabel": "Geschäftsmodus",
     "nav.viewAsCustomer": "Als Kunde ansehen",
     "nav.manageMyShop": "Mein Geschäft verwalten",
-    "account.codeLabel": "Oder gib den per E-Mail erhaltenen Code ein",
-    "account.verifyCode": "Code bestätigen",
   },
   en: {
     "nav.merchant": "Register your business",
@@ -361,8 +357,6 @@ const DICT = {
     "nav.merchantModeLabel": "Merchant mode",
     "nav.viewAsCustomer": "View as customer",
     "nav.manageMyShop": "Manage my shop",
-    "account.codeLabel": "Or enter the code you received by email",
-    "account.verifyCode": "Verify code",
   },
 };
 
