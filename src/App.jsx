@@ -67,7 +67,25 @@ export default function App() {
     const {
       data: { subscription },
     } = onAuthChange(handleUser);
-    return () => subscription.unsubscribe();
+
+    // Le lien magique reçu par email s'ouvre presque toujours dans un NOUVEL
+    // onglet (comportement de l'appli Mail, pas quelque chose qu'on contrôle) —
+    // l'onglet d'origine, resté ouvert en arrière-plan, ne reçoit jamais l'event
+    // onAuthStateChange si le navigateur mobile l'a mis en veille pendant la
+    // bascule vers Mail. Sans ça, le client doit fermer/rouvrir l'onglet
+    // d'origine à la main pour se retrouver connecté. On revérifie donc la
+    // session à chaque retour au premier plan.
+    function handleVisible() {
+      if (document.visibilityState === "visible") getCurrentUser().then(handleUser);
+    }
+    document.addEventListener("visibilitychange", handleVisible);
+    window.addEventListener("focus", handleVisible);
+
+    return () => {
+      subscription.unsubscribe();
+      document.removeEventListener("visibilitychange", handleVisible);
+      window.removeEventListener("focus", handleVisible);
+    };
   }, []);
 
   useEffect(() => {
