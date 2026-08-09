@@ -13,16 +13,23 @@ export default function App() {
   const [view, setView] = useState("public");
   const [user, setUser] = useState(undefined); // undefined = loading, null = signed out
   const [legalModal, setLegalModal] = useState(null);
+  const [pendingReserveBagId, setPendingReserveBagId] = useState(null);
 
   useEffect(() => {
     // Restaure la vue d'où la demande de lien magique est partie (espace
-    // commerçant, favoris, compte) — sinon on retombe sur "public" après
+    // commerçant, favoris, compte, ou "reserve:<id>" pour rouvrir la modale
+    // de réservation du sachet précis) — sinon on retombe sur "public" après
     // le clic, puisque la vue n'est qu'un state React, pas dans l'URL.
     function handleUser(u) {
       setUser(u);
       if (u) {
         const pendingView = consumePendingView();
-        if (pendingView) setView(pendingView);
+        if (pendingView?.startsWith("reserve:")) {
+          setView("public");
+          setPendingReserveBagId(pendingView.slice("reserve:".length));
+        } else if (pendingView) {
+          setView(pendingView);
+        }
       }
     }
     getCurrentUser().then(handleUser);
@@ -49,7 +56,9 @@ export default function App() {
     <LangProvider>
       <div className="wrap">
         <Header view={view} user={user} onNavigate={setView} />
-        {view === "public" && <PublicView user={user} />}
+        {view === "public" && (
+          <PublicView user={user} pendingReserveBagId={pendingReserveBagId} onPendingReserveHandled={() => setPendingReserveBagId(null)} />
+        )}
         {view === "merchant" && <MerchantView user={user} onOpenLegal={setLegalModal} />}
         {view === "account" && <AccountView user={user} />}
         {view === "favorites" && <FavoritesView user={user} />}

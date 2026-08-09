@@ -30,7 +30,7 @@ export default function ReserveModal({ bag, user, onClose, onReserved }) {
           ✕
         </button>
         {!user ? (
-          <AuthPrompt title={t("reserve.loginRequired")} description={t("reserve.loginDesc")} />
+          <AuthPrompt title={t("reserve.loginRequired")} description={t("reserve.loginDesc")} view={`reserve:${bag.id}`} />
         ) : !pickupCode ? (
           <div>
             <h2>{bag.title}</h2>

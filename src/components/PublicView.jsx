@@ -11,7 +11,7 @@ import MapView from "./MapView.jsx";
 import ImpactBanner from "./ImpactBanner.jsx";
 import MissionIntro from "./MissionIntro.jsx";
 
-export default function PublicView({ user }) {
+export default function PublicView({ user, pendingReserveBagId, onPendingReserveHandled }) {
   const { t } = useI18n();
   const [bags, setBags] = useState(null); // null = loading
   const [reserving, setReserving] = useState(null);
@@ -32,6 +32,15 @@ export default function PublicView({ user }) {
     refresh();
     getMerchantRatings().then(setRatings);
   }, []);
+
+  // Rouvre la modale de réservation sur le sachet précis après un retour de
+  // lien magique déclenché depuis "Réserver" (voir ReserveModal + App.jsx).
+  useEffect(() => {
+    if (!pendingReserveBagId || !bags) return;
+    const bag = bags.find((b) => b.id === pendingReserveBagId);
+    if (bag) setReserving(bag);
+    onPendingReserveHandled?.();
+  }, [pendingReserveBagId, bags]);
 
   async function handleLocate() {
     setGeoStatus("loading");
