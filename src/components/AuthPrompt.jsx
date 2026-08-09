@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
-import { sendMagicLink } from "../lib/auth";
+import { sendMagicLink, getErrorMessage } from "../lib/auth";
 
 // Formulaire de connexion par magic link, réutilisé partout où un compte
 // consommateur est requis (réservation, historique, favoris).
@@ -14,7 +14,7 @@ export default function AuthPrompt({ title, description, view }) {
       await sendMagicLink(email.trim(), view);
       setMsg({ type: "success", text: t("account.linkSent") });
     } catch (err) {
-      setMsg({ type: "error", text: err.message });
+      setMsg({ type: "error", text: getErrorMessage(err) });
     }
   }
 

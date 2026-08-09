@@ -24,6 +24,13 @@ export function consumePendingView() {
   return view;
 }
 
+// Selon la forme exacte de l'erreur renvoyée (ex: le champ est "msg" et pas
+// "message" sur certaines réponses 500 de Supabase Auth), err.message peut
+// être vide — sans ça, l'UI affichait littéralement "{}" à l'utilisateur.
+export function getErrorMessage(err, fallback = "Une erreur est survenue, réessaie dans un instant.") {
+  return err?.message || err?.msg || err?.error_description || fallback;
+}
+
 // Alternative au clic sur le lien : saisir le code reçu par email. Utile en
 // PWA installée (le lien ouvre parfois un navigateur externe sans la même session).
 export async function verifyOtpCode(email, token) {

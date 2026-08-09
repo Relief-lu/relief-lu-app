@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
-import { sendMagicLink } from "../lib/auth";
+import { sendMagicLink, getErrorMessage } from "../lib/auth";
 
 export default function MerchantAuth({ onOpenLegal }) {
   const { t } = useI18n();
@@ -12,7 +12,7 @@ export default function MerchantAuth({ onOpenLegal }) {
       await sendMagicLink(email.trim(), "merchant");
       setMsg({ type: "success", text: t("account.linkSent") });
     } catch (err) {
-      setMsg({ type: "error", text: err.message });
+      setMsg({ type: "error", text: getErrorMessage(err) });
     }
   }
 
