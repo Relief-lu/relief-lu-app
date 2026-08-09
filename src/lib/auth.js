@@ -51,6 +51,30 @@ export function onAuthChange(callback) {
   });
 }
 
+// Supabase ne lit les jetons du lien magique (#access_token=...) qu'au tout
+// premier chargement de la page. Si l'onglet cible était déjà ouvert sur
+// app.html (cas fréquent : plusieurs clics sur des liens différents dans le
+// même onglet), le navigateur fait parfois une navigation "légère" qui met à
+// jour le fragment d'URL SANS recharger la page — les jetons du nouveau clic
+// n'étaient alors jamais vus. On les relit donc nous-mêmes à chaque
+// changement de fragment, et on établit la session manuellement.
+// Autre cas observé : plusieurs blocs de jetons collés bout à bout dans le
+// même fragment (ex: "#access_token=...type=magiclink#access_token=...") —
+// on ne garde que le premier bloc valide.
+export async function applySessionFromUrlHash() {
+  const raw = window.location.hash.replace(/^#+/, "").split("#")[0];
+  const params = new URLSearchParams(raw);
+  const access_token = params.get("access_token");
+  const refresh_token = params.get("refresh_token");
+  if (!access_token || !refresh_token) return;
+
+  const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+  const url = new URL(window.location.href);
+  url.hash = "";
+  window.history.replaceState({}, "", url);
+  if (error) throw error;
+}
+
 export async function logout() {
   await supabase.auth.signOut();
 }

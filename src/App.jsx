@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LangProvider } from "./lib/i18n.jsx";
-import { getCurrentUser, onAuthChange, consumePendingView } from "./lib/auth";
+import { getCurrentUser, onAuthChange, consumePendingView, applySessionFromUrlHash } from "./lib/auth";
 import { getMerchantOrNull, isRegistrationComplete } from "./lib/merchants";
 import Header from "./components/Header.jsx";
 import PublicView from "./components/PublicView.jsx";
@@ -44,6 +44,20 @@ export default function App() {
       url.searchParams.delete("error_description");
       window.history.replaceState({}, "", url);
     }
+  }, []);
+
+  useEffect(() => {
+    // Si l'onglet ciblé par le lien magique était déjà ouvert sur app.html
+    // (plusieurs clics dans le même onglet), le navigateur peut mettre à jour
+    // le fragment d'URL sans recharger la page — sans ça, les jetons du
+    // nouveau clic ne sont jamais vus par Supabase (qui ne les lit qu'au
+    // chargement initial). On les relit nous-mêmes à chaque changement.
+    function handleHashChange() {
+      applySessionFromUrlHash().catch((err) => console.error(err));
+    }
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
   useEffect(() => {
