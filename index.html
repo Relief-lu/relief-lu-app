@@ -55,6 +55,12 @@
     color:var(--navy); background:var(--honey); text-decoration:none;
     padding:9px 16px; border-radius:100px;
   }
+  .merchant-link{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600;
+    color:var(--paper); text-decoration:none; border:1px solid rgba(239,230,211,0.25);
+    padding:9px 16px; border-radius:100px;
+  }
+  .merchant-link:hover{border-color:var(--honey); color:var(--honey);}
 
   /* hero */
   .hero{padding:56px 0 40px;}
@@ -207,6 +213,7 @@
           <button data-lang="de">DE</button>
           <button data-lang="en">EN</button>
         </div>
+        <a href="app.html?view=merchant" class="merchant-link" data-i18n="nav.merchant">Espace commerçant</a>
         <a href="app.html" class="open-app" data-i18n="nav.openApp">Voir l'app</a>
       </div>
     </header>
@@ -313,6 +320,7 @@
       "footer.cgu": "CGU",
       "footer.confidentialite": "Confidentialité",
       "nav.openApp": "Voir l'app",
+      "nav.merchant": "Espace commerçant",
     },
     de: {
       "eyebrow": "Startet zum Schulanfang",
@@ -342,6 +350,7 @@
       "footer.cgu": "AGB",
       "footer.confidentialite": "Datenschutz",
       "nav.openApp": "App öffnen",
+      "nav.merchant": "Für Geschäfte",
     },
     en: {
       "eyebrow": "Launching this fall",
@@ -371,6 +380,7 @@
       "footer.cgu": "Terms",
       "footer.confidentialite": "Privacy",
       "nav.openApp": "Open the app",
+      "nav.merchant": "Merchant space",
     },
   };
   let LANG = "fr";

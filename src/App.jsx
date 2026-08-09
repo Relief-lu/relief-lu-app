@@ -38,6 +38,13 @@ export default function App() {
     if (legal) setLegalModal(legal);
   }, []);
 
+  // Ouvre directement une vue via un lien partageable, ex: app.html?view=merchant
+  // (utilisé par le lien "Espace commerçant" de la landing page).
+  useEffect(() => {
+    const requestedView = new URLSearchParams(window.location.search).get("view");
+    if (requestedView) setView(requestedView);
+  }, []);
+
   return (
     <LangProvider>
       <div className="wrap">
