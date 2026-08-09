@@ -167,6 +167,52 @@
     color:rgba(239,230,211,0.4); margin-top:14px; display:block;
   }
 
+  /* category marquee */
+  .category-marquee{
+    width:100vw; margin-left:calc(50% - 50vw); overflow:hidden;
+    background:var(--navy-2); padding:16px 0; margin-top:20px;
+  }
+  .marquee-track{
+    display:flex; gap:40px; white-space:nowrap; width:max-content;
+    animation:marquee-scroll 26s linear infinite;
+  }
+  .marquee-track span{
+    font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:14px;
+    letter-spacing:1px; text-transform:uppercase; color:var(--paper-dim);
+  }
+  @keyframes marquee-scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* why (value props) */
+  .why{padding:50px 0 10px;}
+  .why-grid{
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:18px;
+  }
+  .why-item{
+    font-family:'Fraunces', serif; font-weight:560; font-size:19px; line-height:1.35;
+    color:var(--paper); background:var(--navy-2); border-radius:14px; padding:22px;
+  }
+
+  /* closing CTA */
+  .closing-cta{
+    padding:64px 0; text-align:center; border-top:1px solid rgba(239,230,211,0.12);
+  }
+  .closing-cta h2{
+    font-family:'Fraunces', serif; font-weight:560; font-size:clamp(24px,3.4vw,34px);
+    max-width:20ch; margin:0 auto 30px; line-height:1.3;
+  }
+  .closing-buttons{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+  .btn-cta{
+    font-family:'Work Sans', sans-serif; font-weight:700; font-size:15px;
+    padding:15px 26px; border-radius:10px; cursor:pointer; text-decoration:none;
+    background:var(--honey); color:var(--navy); border:none;
+  }
+  .btn-cta:hover{background:#f0b862;}
+  .btn-cta.secondary{background:transparent; border:1px solid rgba(239,230,211,0.3); color:var(--paper);}
+  .btn-cta.secondary:hover{border-color:var(--honey); color:var(--honey);}
+
   /* mission */
   .mission{
     padding:64px 0; border-top:1px solid rgba(239,230,211,0.12);
@@ -221,6 +267,7 @@
     .steps{grid-template-columns:1fr;}
     .capture{flex-direction:column; align-items:stretch;}
     .city-search{order:3; max-width:none; width:100%;}
+    .why-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -258,6 +305,37 @@
       </form>
       <div class="thanks" id="thanks"></div>
       <div class="capture-note" data-i18n="capture.note">Zéro spam. Un seul message, le jour où c'est prêt.</div>
+    </section>
+
+    <section class="category-marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span data-i18n="cat.bread">Pain</span>
+        <span data-i18n="cat.pastries">Viennoiseries</span>
+        <span data-i18n="cat.dishes">Plats du jour</span>
+        <span data-i18n="cat.grocery">Épicerie</span>
+        <span data-i18n="cat.deli">Charcuterie</span>
+        <span data-i18n="cat.sandwiches">Sandwichs</span>
+        <span data-i18n="cat.produce">Fruits &amp; légumes</span>
+        <span data-i18n="cat.catering">Traiteur</span>
+        <span data-i18n="cat.bread">Pain</span>
+        <span data-i18n="cat.pastries">Viennoiseries</span>
+        <span data-i18n="cat.dishes">Plats du jour</span>
+        <span data-i18n="cat.grocery">Épicerie</span>
+        <span data-i18n="cat.deli">Charcuterie</span>
+        <span data-i18n="cat.sandwiches">Sandwichs</span>
+        <span data-i18n="cat.produce">Fruits &amp; légumes</span>
+        <span data-i18n="cat.catering">Traiteur</span>
+      </div>
+    </section>
+
+    <section class="why">
+      <div class="how-eyebrow" data-i18n="why.eyebrow">Pourquoi Relief</div>
+      <div class="why-grid">
+        <div class="why-item" data-i18n="why.item1">Des invendus à prix réduit, près de chez toi</div>
+        <div class="why-item" data-i18n="why.item2">Chaque euro économisé compte vraiment</div>
+        <div class="why-item" data-i18n="why.item3">Zéro gaspillage, zéro jugement</div>
+        <div class="why-item" data-i18n="why.item4">Découvre de nouveaux commerces locaux</div>
+      </div>
     </section>
 
     <section class="tickets">
@@ -302,6 +380,14 @@
       </div>
     </section>
 
+    <section class="closing-cta">
+      <h2 data-i18n="closing.title">Rejoins le mouvement anti-gaspillage au Luxembourg</h2>
+      <div class="closing-buttons">
+        <button type="button" class="btn-cta" id="closing-cta-waitlist" data-i18n="capture.button">Je veux être prévenu·e</button>
+        <a href="app.html?view=merchant" class="btn-cta secondary" data-i18n="nav.merchant">Inscrivez votre commerce</a>
+      </div>
+    </section>
+
     <footer>
       <a href="index.html" class="foot-logo">relief<span style="color:var(--honey)">.lu</span></a>
       <div class="foot-links">
@@ -331,6 +417,20 @@
       "citySearch.unsupported": "Géolocalisation non disponible sur cet appareil.",
       "citySearch.denied": "Localisation refusée ou indisponible.",
       "citySearch.notFound": "Ville introuvable, réessaie avec un autre nom.",
+      "cat.bread": "Pain",
+      "cat.pastries": "Viennoiseries",
+      "cat.dishes": "Plats du jour",
+      "cat.grocery": "Épicerie",
+      "cat.deli": "Charcuterie",
+      "cat.sandwiches": "Sandwichs",
+      "cat.produce": "Fruits & légumes",
+      "cat.catering": "Traiteur",
+      "why.eyebrow": "Pourquoi Relief",
+      "why.item1": "Des invendus à prix réduit, près de chez toi",
+      "why.item2": "Chaque euro économisé compte vraiment",
+      "why.item3": "Zéro gaspillage, zéro jugement",
+      "why.item4": "Découvre de nouveaux commerces locaux",
+      "closing.title": "Rejoins le mouvement anti-gaspillage au Luxembourg",
       "capture.button": "Je veux être prévenu·e",
       "capture.note": "Zéro spam. Un seul message, le jour où c'est prêt.",
       "thanks.done": "✓ Merci — tu seras prévenu·e au lancement.",
@@ -366,6 +466,20 @@
       "citySearch.unsupported": "Standortbestimmung auf diesem Gerät nicht verfügbar.",
       "citySearch.denied": "Standortzugriff verweigert oder nicht verfügbar.",
       "citySearch.notFound": "Stadt nicht gefunden, versuche einen anderen Namen.",
+      "cat.bread": "Brot",
+      "cat.pastries": "Gebäck",
+      "cat.dishes": "Tagesgerichte",
+      "cat.grocery": "Lebensmittel",
+      "cat.deli": "Aufschnitt",
+      "cat.sandwiches": "Sandwiches",
+      "cat.produce": "Obst & Gemüse",
+      "cat.catering": "Catering",
+      "why.eyebrow": "Warum Relief",
+      "why.item1": "Überschüsse zu reduzierten Preisen, in deiner Nähe",
+      "why.item2": "Jeder gesparte Euro zählt wirklich",
+      "why.item3": "Null Verschwendung, null Urteil",
+      "why.item4": "Entdecke neue lokale Geschäfte",
+      "closing.title": "Mach mit bei der Bewegung gegen Lebensmittelverschwendung in Luxemburg",
       "capture.button": "Ich möchte benachrichtigt werden",
       "capture.note": "Kein Spam. Nur eine Nachricht, am Tag des Starts.",
       "thanks.done": "✓ Danke — du wirst beim Start benachrichtigt.",
@@ -401,6 +515,20 @@
       "citySearch.unsupported": "Geolocation isn't available on this device.",
       "citySearch.denied": "Location access denied or unavailable.",
       "citySearch.notFound": "City not found, try another name.",
+      "cat.bread": "Bread",
+      "cat.pastries": "Pastries",
+      "cat.dishes": "Daily dishes",
+      "cat.grocery": "Groceries",
+      "cat.deli": "Deli",
+      "cat.sandwiches": "Sandwiches",
+      "cat.produce": "Fruit & veg",
+      "cat.catering": "Catering",
+      "why.eyebrow": "Why Relief",
+      "why.item1": "Surplus food at a reduced price, near you",
+      "why.item2": "Every euro saved really counts",
+      "why.item3": "Zero waste, zero judgment",
+      "why.item4": "Discover new local businesses",
+      "closing.title": "Join the fight against food waste in Luxembourg",
       "capture.button": "Notify me",
       "capture.note": "Zero spam. One message, the day it's ready.",
       "thanks.done": "✓ Thanks — you'll be notified at launch.",
@@ -509,6 +637,11 @@
     } catch {
       showSearchError(t('citySearch.notFound'));
     }
+  });
+
+  document.getElementById('closing-cta-waitlist').addEventListener('click', function(){
+    document.getElementById('capture-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    emailInput.focus();
   });
 
   form.addEventListener('submit', async function(e){
