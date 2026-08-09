@@ -116,6 +116,9 @@ const DICT = {
     "merchant.consentAnd": "et la",
     "legal.cgu": "CGU",
     "legal.confidentialite": "Politique de confidentialité",
+    "nav.merchantModeLabel": "Mode commerçant",
+    "nav.viewAsCustomer": "Voir comme client",
+    "nav.manageMyShop": "Gérer mon commerce",
   },
   de: {
     "nav.merchant": "Registrieren Sie Ihr Geschäft",
@@ -232,6 +235,9 @@ const DICT = {
     "merchant.consentAnd": "und die",
     "legal.cgu": "AGB",
     "legal.confidentialite": "Datenschutzerklärung",
+    "nav.merchantModeLabel": "Geschäftsmodus",
+    "nav.viewAsCustomer": "Als Kunde ansehen",
+    "nav.manageMyShop": "Mein Geschäft verwalten",
   },
   en: {
     "nav.merchant": "Register your business",
@@ -348,6 +354,9 @@ const DICT = {
     "merchant.consentAnd": "and the",
     "legal.cgu": "Terms",
     "legal.confidentialite": "Privacy Policy",
+    "nav.merchantModeLabel": "Merchant mode",
+    "nav.viewAsCustomer": "View as customer",
+    "nav.manageMyShop": "Manage my shop",
   },
 };
 
