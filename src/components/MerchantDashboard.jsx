@@ -46,6 +46,10 @@ export default function MerchantDashboard({ user }) {
       setMsg({ type: "error", text: "Titre et créneau de retrait sont obligatoires." });
       return;
     }
+    if (new Date(form.end) <= new Date(form.start)) {
+      setMsg({ type: "error", text: "Le retrait « jusqu'à » doit être après le retrait « à partir de »." });
+      return;
+    }
     try {
       let image_url = null;
       if (photo) image_url = await uploadBagPhoto(user.id, photo);
