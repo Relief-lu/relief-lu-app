@@ -180,7 +180,7 @@
     display:flex; align-items:center; justify-content:space-between;
     flex-wrap:wrap; gap:14px;
   }
-  .foot-logo{font-family:'Fraunces', serif; font-weight:680; font-size:17px;}
+  .foot-logo{font-family:'Fraunces', serif; font-weight:680; font-size:17px; text-decoration:none; color:var(--paper);}
   .foot-links{display:flex; gap:14px; align-items:center;}
   .foot-links a{
     color:var(--paper-dim); text-decoration:none; font-size:14px;
@@ -200,7 +200,7 @@
 <body>
   <div class="wrap">
     <header>
-      <div class="logo">relief<span class="dot">.lu</span></div>
+      <a href="index.html" class="logo">relief<span class="dot">.lu</span></a>
       <div class="head-right">
         <div class="langs">
           <button data-lang="fr" class="active">FR</button>
@@ -267,7 +267,7 @@
     </section>
 
     <footer>
-      <div class="foot-logo">relief<span style="color:var(--honey)">.lu</span></div>
+      <a href="index.html" class="foot-logo">relief<span style="color:var(--honey)">.lu</span></a>
       <div class="foot-links">
         <a href="app.html?legal=mentions" data-i18n="footer.mentions">Mentions légales</a>
         <a href="app.html?legal=cgu" data-i18n="footer.cgu">CGU</a>
