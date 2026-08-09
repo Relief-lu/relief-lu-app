@@ -19,6 +19,26 @@ export async function updateMerchantLocation(userId, lat, lng) {
   if (error) throw error;
 }
 
+// Une inscription est considérée complète une fois l'adresse renseignée —
+// avant ça, le formulaire d'inscription s'affiche à la place du dashboard.
+export function isRegistrationComplete(merchant) {
+  return Boolean(merchant?.address);
+}
+
+export async function updateMerchantProfile(userId, profile) {
+  const { error } = await supabase
+    .from("merchants")
+    .update({
+      business_name: profile.business_name,
+      address: profile.address,
+      city: profile.city,
+      phone: profile.phone,
+      registration_number: profile.registration_number,
+    })
+    .eq("id", userId);
+  if (error) throw error;
+}
+
 // Réutilise le bucket "bag-photos" (déjà public, déjà autorisé en écriture
 // pour les commerçants connectés) plutôt que d'en créer un dédié.
 export async function uploadMerchantLogo(userId, file) {
