@@ -43,6 +43,17 @@
   }
   .logo .dot{color:var(--honey);}
   .head-right{display:flex; align-items:center; gap:12px;}
+  .city-search{
+    display:flex; align-items:center; gap:8px;
+    background:var(--navy-2); border:1px solid rgba(239,230,211,0.18);
+    border-radius:100px; padding:9px 16px; flex:1 1 auto; max-width:280px;
+    color:var(--paper-dim);
+  }
+  .city-search input{
+    background:none; border:none; outline:none; color:var(--paper);
+    font-family:'Work Sans', sans-serif; font-size:13px; width:100%;
+  }
+  .city-search input::placeholder{color:var(--paper-dim);}
   .langs{display:flex; gap:6px; background:var(--navy-2); padding:4px; border-radius:100px;}
   .langs button{
     background:none; border:none; color:var(--paper-dim); cursor:pointer;
@@ -200,6 +211,7 @@
     .tickets{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
     .capture{flex-direction:column; align-items:stretch;}
+    .city-search{order:3; max-width:none; width:100%;}
   }
 </style>
 </head>
@@ -207,6 +219,10 @@
   <div class="wrap">
     <header>
       <a href="index.html" class="logo">relief<span class="dot">.lu</span></a>
+      <form class="city-search" id="city-search-form">
+        <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" id="city-search-input" data-i18n-placeholder="citySearch.placeholder" placeholder="Nourriture à proximité…">
+      </form>
       <div class="head-right">
         <div class="langs">
           <button data-lang="fr" class="active">FR</button>
@@ -299,6 +315,7 @@
       "h1.part2": "Ce n'est pas le cas pour tout le monde.",
       "sub": "Relief redonne de la valeur à la nourriture qui allait être jetée — boulangeries, restaurants, épiceries, traiteurs — pour que chaque euro compte un peu moins fort.",
       "capture.placeholder": "ton-email@exemple.lu",
+      "citySearch.placeholder": "Nourriture à proximité…",
       "capture.button": "Je veux être prévenu·e",
       "capture.note": "Zéro spam. Un seul message, le jour où c'est prêt.",
       "thanks.done": "✓ Merci — tu seras prévenu·e au lancement.",
@@ -330,6 +347,7 @@
       "h1.part2": "Das gilt nicht für alle.",
       "sub": "Relief bringt Lebensmittel, die sonst weggeworfen würden, zurück in Umlauf — Bäckereien, Restaurants, Lebensmittelgeschäfte, Caterer — damit jeder Euro etwas mehr zählt.",
       "capture.placeholder": "deine-email@beispiel.lu",
+      "citySearch.placeholder": "Essen in deiner Nähe…",
       "capture.button": "Ich möchte benachrichtigt werden",
       "capture.note": "Kein Spam. Nur eine Nachricht, am Tag des Starts.",
       "thanks.done": "✓ Danke — du wirst beim Start benachrichtigt.",
@@ -361,6 +379,7 @@
       "h1.part2": "That's not true for everyone.",
       "sub": "Relief brings back into circulation food that was going to be thrown away — bakeries, restaurants, grocery stores, caterers — so every euro counts a little less hard.",
       "capture.placeholder": "your-email@example.lu",
+      "citySearch.placeholder": "Food nearby…",
       "capture.button": "Notify me",
       "capture.note": "Zero spam. One message, the day it's ready.",
       "thanks.done": "✓ Thanks — you'll be notified at launch.",
@@ -418,6 +437,15 @@
   const form = document.getElementById('capture-form');
   const thanks = document.getElementById('thanks');
   const emailInput = document.getElementById('capture-email');
+
+  // Pas encore de sachets publiés — la recherche de ville redirige vers
+  // l'inscription à la liste d'attente plutôt que vers des résultats vides.
+  const citySearchForm = document.getElementById('city-search-form');
+  citySearchForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('capture-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    emailInput.focus();
+  });
 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
