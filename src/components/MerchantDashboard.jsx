@@ -12,6 +12,7 @@ const emptyForm = {
   title: "",
   category: "boulangerie",
   desc: "",
+  originalPrice: "",
   price: 4,
   qty: 5,
   start: "",
@@ -61,6 +62,7 @@ export default function MerchantDashboard({ user }) {
         category: form.category,
         description: form.desc.trim(),
         price_cents: Math.round(parseFloat(form.price || "0") * 100),
+        original_price_cents: form.originalPrice ? Math.round(parseFloat(form.originalPrice) * 100) : null,
         quantity_total: parseInt(form.qty || "1", 10),
         quantity_left: parseInt(form.qty || "1", 10),
         pickup_start: form.start,
@@ -110,9 +112,22 @@ export default function MerchantDashboard({ user }) {
         </div>
         <div className="two-col">
           <div className="field">
+            <label>{t("merchant.f.originalPrice")}</label>
+            <input
+              type="number"
+              min="0"
+              step="0.5"
+              value={form.originalPrice}
+              onChange={(e) => set("originalPrice", e.target.value)}
+              placeholder={t("merchant.f.originalPricePlaceholder")}
+            />
+          </div>
+          <div className="field">
             <label>{t("merchant.f.price")}</label>
             <input type="number" min="1" step="0.5" value={form.price} onChange={(e) => set("price", e.target.value)} />
           </div>
+        </div>
+        <div className="two-col">
           <div className="field">
             <label>{t("merchant.f.qty")}</label>
             <input type="number" min="1" step="1" value={form.qty} onChange={(e) => set("qty", e.target.value)} />

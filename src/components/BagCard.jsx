@@ -32,45 +32,52 @@ function useCountdown(startISO, endISO, t) {
 export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, distanceKm, rating }) {
   const { lang, t } = useI18n();
   const countdown = useCountdown(bag.pickup_start, bag.pickup_end, t);
+  const hasDiscount = bag.original_price_cents && bag.original_price_cents > bag.price_cents;
 
   return (
     <div className="card">
       <div className="thumb" style={bag.image_url ? { backgroundImage: `url('${bag.image_url}')` } : undefined}>
         {!bag.image_url && "🥡"}
+        <div className="badge-availability">
+          {bag.quantity_left} {t("badge.available")}
+        </div>
+        {rating && (
+          <div className="badge-rating">
+            ★ {rating.avg.toFixed(1)}
+          </div>
+        )}
         {bag.merchants?.logo_url && (
           <div className="merchant-logo">
             <img src={bag.merchants.logo_url} alt="" />
           </div>
         )}
-        {onToggleFavorite && (
-          <button
-            className={`favorite-btn ${isFavorite ? "active" : ""}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleFavorite(bag.merchant_id);
-            }}
-          >
-            {isFavorite ? "♥" : "♡"}
-          </button>
-        )}
       </div>
       <div className="body">
-        <div className="merchant">
-          {bag.merchants?.business_name || ""}
-          {rating && (
-            <span className="stars" style={{ marginLeft: 6 }}>
-              {"★".repeat(Math.round(rating.avg))} ({rating.count})
-            </span>
+        <div className="merchant row">
+          <span>{bag.merchants?.business_name || ""}</span>
+          {onToggleFavorite && (
+            <button
+              className={`favorite-btn-inline ${isFavorite ? "active" : ""}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleFavorite(bag.merchant_id);
+              }}
+            >
+              {isFavorite ? "♥" : "♡"}
+            </button>
           )}
         </div>
         <h3>{bag.title}</h3>
         <div className="meta">
-          {t("pickupWindow")} {formatPickupWindow(bag.pickup_start, bag.pickup_end, lang)} · {bag.quantity_left} {t("left")}
+          {t("pickupWindow")} {formatPickupWindow(bag.pickup_start, bag.pickup_end, lang)}
           {distanceKm != null && <> · {distanceKm.toFixed(1)} km</>}
         </div>
         <div className="countdown">{countdown}</div>
         <div className="row" style={{ marginTop: 10 }}>
-          <span className="price">{(bag.price_cents / 100).toFixed(2)} €</span>
+          <span>
+            {hasDiscount && <span className="price-original">{(bag.original_price_cents / 100).toFixed(2)} €</span>}
+            <span className="price">{(bag.price_cents / 100).toFixed(2)} €</span>
+          </span>
           <button className="btn small" onClick={() => onReserve(bag)}>
             {t("reserve")}
           </button>
