@@ -588,8 +588,11 @@
   const emailInput = document.getElementById('capture-email');
 
   // Recherche géographique : géolocalisation du navigateur, ou géocodage de la
-  // ville tapée (via Nominatim/OpenStreetMap, déjà utilisé pour les cartes de
-  // l'app). La position est stockée sous la même clé que l'app React
+  // ville tapée. Nominatim (utilisé pour les cartes de l'app) ne renvoie aucun
+  // header CORS, donc un fetch() direct depuis le navigateur est bloqué en
+  // silence — on utilise Photon (mêmes données OpenStreetMap, CORS activé,
+  // pensé pour cet usage côté client) uniquement pour ce géocodage texte.
+  // La position est stockée sous la même clé que l'app React
   // (lib/geolocation.js) pour qu'elle soit déjà appliquée à l'arrivée sur
   // app.html — même si aucun sachet n'est encore publié, le tri par distance
   // et "près de moi" fonctionneront dès qu'il y en aura.
@@ -630,10 +633,14 @@
     if (!query) return;
     citySearchMsg.style.display = 'none';
     try {
-      const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=lu&q=' + encodeURIComponent(query));
-      const results = await res.json();
-      if (!results.length) { showSearchError(t('citySearch.notFound')); return; }
-      goToApp({ lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) });
+      // Biais géographique centré sur le Luxembourg (lat/lon) pour privilégier
+      // les résultats locaux — Photon n'a pas de filtre pays strict gratuit.
+      const res = await fetch('https://photon.komoot.io/api/?limit=1&lat=49.75&lon=6.15&zoom=10&lang=fr&q=' + encodeURIComponent(query));
+      const data = await res.json();
+      const feature = data.features && data.features[0];
+      if (!feature) { showSearchError(t('citySearch.notFound')); return; }
+      const [lng, lat] = feature.geometry.coordinates;
+      goToApp({ lat, lng });
     } catch {
       showSearchError(t('citySearch.notFound'));
     }
