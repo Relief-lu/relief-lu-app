@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 const DICT = {
   fr: {
-    "nav.merchant": "Espace commerçant",
+    "nav.merchant": "Inscrivez votre commerce",
     "public.title": "Les invendus du jour, près de chez toi",
     "public.sub": "Réserve, récupère sur place.",
     "public.loading": "Chargement…",
@@ -96,9 +96,15 @@ const DICT = {
     "mission.title": "Pourquoi Relief ?",
     "mission.text": "Le Luxembourg est l'un des pays les plus riches du monde — ce n'est pas le cas pour tout le monde. Relief remet en circulation, à prix réduit, la nourriture que boulangeries, restaurants, épiceries et traiteurs allaient jeter. Aucun sachet n'est encore en ligne : les premiers commerçants arrivent bientôt.",
     "mission.backToLanding": "En savoir plus",
+    "merchant.registerTitle": "Inscrivez votre commerce",
+    "merchant.registerDesc": "Reçois un lien de connexion par email — pas de mot de passe, ni de compte à créer à part.",
+    "merchant.consentPrefix": "En continuant, vous acceptez les",
+    "merchant.consentAnd": "et la",
+    "legal.cgu": "CGU",
+    "legal.confidentialite": "Politique de confidentialité",
   },
   de: {
-    "nav.merchant": "Für Geschäfte",
+    "nav.merchant": "Registrieren Sie Ihr Geschäft",
     "public.title": "Die Reste von heute, in deiner Nähe",
     "public.sub": "Reservieren, abholen.",
     "public.loading": "Wird geladen…",
@@ -192,9 +198,15 @@ const DICT = {
     "mission.title": "Warum Relief?",
     "mission.text": "Luxemburg ist eines der reichsten Länder der Welt — das gilt nicht für alle. Relief bringt Lebensmittel, die Bäckereien, Restaurants, Lebensmittelgeschäfte und Caterer sonst wegwerfen würden, zu reduzierten Preisen zurück in Umlauf. Noch sind keine Tüten online — die ersten Geschäfte kommen bald.",
     "mission.backToLanding": "Mehr erfahren",
+    "merchant.registerTitle": "Registriere dein Geschäft",
+    "merchant.registerDesc": "Erhalte einen Login-Link per E-Mail — kein Passwort, kein separates Konto nötig.",
+    "merchant.consentPrefix": "Mit dem Fortfahren akzeptierst du die",
+    "merchant.consentAnd": "und die",
+    "legal.cgu": "AGB",
+    "legal.confidentialite": "Datenschutzerklärung",
   },
   en: {
-    "nav.merchant": "Merchant space",
+    "nav.merchant": "Register your business",
     "public.title": "Today's surplus, near you",
     "public.sub": "Reserve, then pick up.",
     "public.loading": "Loading…",
@@ -288,6 +300,12 @@ const DICT = {
     "mission.title": "Why Relief?",
     "mission.text": "Luxembourg is one of the richest countries in the world — that's not true for everyone. Relief brings food that bakeries, restaurants, grocery stores and caterers would otherwise throw away back into circulation, at a reduced price. No bags are online yet — the first merchants are coming soon.",
     "mission.backToLanding": "Learn more",
+    "merchant.registerTitle": "Register your business",
+    "merchant.registerDesc": "Get a sign-in link by email — no password, no separate account to create.",
+    "merchant.consentPrefix": "By continuing, you accept the",
+    "merchant.consentAnd": "and the",
+    "legal.cgu": "Terms",
+    "legal.confidentialite": "Privacy Policy",
   },
 };
 

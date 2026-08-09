@@ -50,7 +50,7 @@ export default function App() {
       <div className="wrap">
         <Header view={view} user={user} onNavigate={setView} />
         {view === "public" && <PublicView user={user} />}
-        {view === "merchant" && <MerchantView user={user} />}
+        {view === "merchant" && <MerchantView user={user} onOpenLegal={setLegalModal} />}
         {view === "account" && <AccountView user={user} />}
         {view === "favorites" && <FavoritesView user={user} />}
 
