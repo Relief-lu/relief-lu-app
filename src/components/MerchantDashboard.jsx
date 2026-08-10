@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { loadMerchantBags, publishBag, uploadBagPhoto } from "../lib/bags";
 import { notifyNewBag } from "../lib/notify";
+import { getErrorMessage } from "../lib/auth";
 import MerchantLocationPicker from "./MerchantLocationPicker.jsx";
 import MerchantLogoUpload from "./MerchantLogoUpload.jsx";
 import MerchantStats from "./MerchantStats.jsx";
@@ -49,10 +50,20 @@ export default function MerchantDashboard({ user, merchant, onMerchantChanged })
       setMsg({ type: "error", text: "Le retrait « jusqu'à » doit être après le retrait « à partir de »." });
       return;
     }
-    try {
-      let image_url = null;
-      if (photo) image_url = await uploadBagPhoto(user.id, photo);
+    // La photo est un plus, pas une condition pour publier — si son envoi
+    // échoue (réseau, format...), le sachet part quand même sans elle plutôt
+    // que de bloquer toute la publication pour un problème secondaire.
+    let image_url = null;
+    let photoFailed = false;
+    if (photo) {
+      try {
+        image_url = await uploadBagPhoto(user.id, photo);
+      } catch {
+        photoFailed = true;
+      }
+    }
 
+    try {
       const newBag = await publishBag({
         merchant_id: user.id,
         title: form.title.trim(),
@@ -67,12 +78,16 @@ export default function MerchantDashboard({ user, merchant, onMerchantChanged })
         image_url,
       });
       notifyNewBag(newBag);
-      setMsg({ type: "success", text: "Sachet publié !" });
+      setMsg(
+        photoFailed
+          ? { type: "success", text: "Sachet publié ! (la photo n'a pas pu être envoyée — réessaie avec une autre photo si besoin)" }
+          : { type: "success", text: "Sachet publié !" }
+      );
       setForm(emptyForm);
       setPhoto(null);
       refreshMyBags();
     } catch (err) {
-      setMsg({ type: "error", text: err.message });
+      setMsg({ type: "error", text: getErrorMessage(err) });
     }
   }
 
