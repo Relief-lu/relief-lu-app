@@ -12,7 +12,14 @@ export default function NotificationToggle({ user }) {
     getCurrentSubscription().then((sub) => setSubscribed(!!sub));
   }, []);
 
-  if (!user || !isPushSupported()) return null;
+  if (!user) return null;
+
+  // Sur iPhone, Safari ne permet les notifications web que si le site a été
+  // ajouté à l'écran d'accueil (jamais dans un onglet classique) — sans ce
+  // message, le bouton disparaît juste sans aucune explication.
+  if (!isPushSupported()) {
+    return <p className="page-sub" style={{ marginBottom: 20 }}>{t("push.unsupportedHint")}</p>;
+  }
 
   async function handleToggle() {
     setMsg(null);
