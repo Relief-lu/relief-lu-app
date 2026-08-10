@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 
+// Même estimation que la bannière d'impact globale (lib/impact.js) — reprise
+// ici pour l'afficher sachet par sachet, comme le fait LastBite.
+const CO2_KG_PER_BAG = 2.5;
+
 export function formatPickupWindow(startISO, endISO, lang) {
   const s = new Date(startISO);
   const e = new Date(endISO);
@@ -82,6 +86,7 @@ export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, 
             {t("reserve")}
           </button>
         </div>
+        <div className="co2-pill">🌍 ~{CO2_KG_PER_BAG} {t("badge.co2Suffix")}</div>
       </div>
     </div>
   );
