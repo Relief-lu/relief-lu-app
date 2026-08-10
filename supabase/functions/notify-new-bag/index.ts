@@ -63,7 +63,19 @@ const appServer = await webpush.ApplicationServer.new({
   vapidKeys,
 });
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
 Deno.serve(async (req) => {
+  // Le navigateur envoie d'abord une requête OPTIONS de vérification (sans
+  // corps) avant le vrai POST — sans ce court-circuit, req.json() plantait
+  // en essayant de lire un contenu qui n'existe pas sur cette requête-là.
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
   const payload = await req.json();
   const bag = payload.record;
