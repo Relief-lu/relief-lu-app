@@ -1,9 +1,14 @@
-// Supabase Edge Function — appelée par un Database Webhook sur INSERT dans `bags`.
+// Supabase Edge Function — appelée directement par le client juste après la
+// publication d'un sachet (voir src/lib/notify.js côté app).
 // Notifie par Web Push les utilisateurs ayant mis le commerçant en favori.
-// À déployer depuis le dashboard Supabase (Edge Functions → New function → coller ce code).
+// À déployer depuis le dashboard Supabase (Edge Functions → smart-service → Code → coller ceci → Deploy).
+//
+// Utilise @negrel/webpush (natif Deno) plutôt que le paquet npm "web-push"
+// (pensé pour Node) qui plante sous Deno après l'envoi — voir l'historique
+// de ce fichier si besoin de contexte sur ce changement.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
-import webpush from "npm:web-push@3";
+import * as webpush from "jsr:@negrel/webpush@0";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -11,16 +16,51 @@ const VAPID_PUBLIC_KEY = Deno.env.get("VAPID_PUBLIC_KEY")!;
 const VAPID_PRIVATE_KEY = Deno.env.get("VAPID_PRIVATE_KEY")!;
 const VAPID_SUBJECT = Deno.env.get("VAPID_SUBJECT") ?? "mailto:contact@relief.lu";
 
-webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+function b64urlToBytes(b64url: string): Uint8Array {
+  const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+  const bin = atob(padded);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
 
-// La lib "web-push" (pensée pour Node) plante sous Deno après l'envoi, en
-// essayant de lire la réponse du service de push d'une façon incompatible —
-// l'erreur survient hors de la chaîne await'ée du try/catch ci-dessous (donc
-// jamais rattrapée normalement) et fait planter toute la fonction, même
-// quand la notification a déjà été envoyée avec succès. On l'intercepte ici.
-addEventListener("unhandledrejection", (e) => {
-  e.preventDefault();
-  console.error("rejet non intercepté ignoré (probable bug web-push/Deno) :", e.reason);
+function bytesToB64url(bytes: Uint8Array): string {
+  let bin = "";
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+// Reconstruit la paire de clés VAPID existante (les mêmes clés déjà connues
+// du navigateur des utilisateurs, indispensable pour ne pas invalider les
+// abonnements déjà créés) au format JWK attendu par le crypto natif de Deno.
+async function loadVapidKeys(): Promise<CryptoKeyPair> {
+  const rawPublic = b64urlToBytes(VAPID_PUBLIC_KEY); // 0x04 || X(32) || Y(32)
+  const x = bytesToB64url(rawPublic.slice(1, 33));
+  const y = bytesToB64url(rawPublic.slice(33, 65));
+  const d = bytesToB64url(b64urlToBytes(VAPID_PRIVATE_KEY));
+
+  const publicKey = await crypto.subtle.importKey(
+    "jwk",
+    { kty: "EC", crv: "P-256", x, y, ext: true },
+    { name: "ECDSA", namedCurve: "P-256" },
+    true,
+    ["verify"]
+  );
+  const privateKey = await crypto.subtle.importKey(
+    "jwk",
+    { kty: "EC", crv: "P-256", x, y, d, ext: true },
+    { name: "ECDSA", namedCurve: "P-256" },
+    true,
+    ["sign"]
+  );
+  return { publicKey, privateKey };
+}
+
+const vapidKeys = await loadVapidKeys();
+const appServer = await webpush.ApplicationServer.new({
+  contactInformation: VAPID_SUBJECT,
+  vapidKeys,
 });
 
 Deno.serve(async (req) => {
@@ -62,13 +102,15 @@ Deno.serve(async (req) => {
   await Promise.all(
     (subs ?? []).map(async (sub) => {
       try {
-        await webpush.sendNotification(
-          { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
-          notification
-        );
+        const subscriber = appServer.subscribe({
+          endpoint: sub.endpoint,
+          keys: { p256dh: sub.p256dh, auth: sub.auth },
+        });
+        await subscriber.pushTextMessage(notification, {});
       } catch (err) {
         // 404/410 = l'abonnement n'existe plus côté navigateur, on le nettoie.
-        if (err.statusCode === 404 || err.statusCode === 410) staleIds.push(sub.id);
+        const status = err?.response?.status;
+        if (status === 404 || status === 410) staleIds.push(sub.id);
       }
     })
   );
