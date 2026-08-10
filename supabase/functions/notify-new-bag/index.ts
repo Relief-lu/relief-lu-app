@@ -13,6 +13,16 @@ const VAPID_SUBJECT = Deno.env.get("VAPID_SUBJECT") ?? "mailto:contact@relief.lu
 
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 
+// La lib "web-push" (pensée pour Node) plante sous Deno après l'envoi, en
+// essayant de lire la réponse du service de push d'une façon incompatible —
+// l'erreur survient hors de la chaîne await'ée du try/catch ci-dessous (donc
+// jamais rattrapée normalement) et fait planter toute la fonction, même
+// quand la notification a déjà été envoyée avec succès. On l'intercepte ici.
+addEventListener("unhandledrejection", (e) => {
+  e.preventDefault();
+  console.error("rejet non intercepté ignoré (probable bug web-push/Deno) :", e.reason);
+});
+
 Deno.serve(async (req) => {
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
   const payload = await req.json();
