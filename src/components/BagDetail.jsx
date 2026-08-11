@@ -10,14 +10,16 @@ function isToday(iso) {
   return d.toDateString() === now.toDateString();
 }
 
-// Icône de partage standard (carré + flèche vers le haut), le symbole
-// reconnaissable partout aujourd'hui — plus clair qu'une simple flèche "↗".
+// Icône "Share2" de Lucide (trois points reliés) — même icône que celle
+// utilisée pour "Partager" dans tatuca, pour rester cohérent entre les apps.
 function ShareIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 3v12" />
-      <path d="M7 8l5-5 5 5" />
-      <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
     </svg>
   );
 }
