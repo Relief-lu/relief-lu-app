@@ -2,18 +2,37 @@ import { useState } from "react";
 import { useI18n } from "../lib/i18n.jsx";
 import { addReview } from "../lib/reviews";
 
+const CRITERIA = ["collecte", "qualite", "variete", "quantite"];
+
+function StarPicker({ value, onChange }) {
+  return (
+    <div className="stars" style={{ fontSize: 22, cursor: "pointer" }}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span key={n} onClick={() => onChange(n)}>
+          {n <= value ? "★" : "☆"}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function ReviewForm({ reservation, onClose, onSubmitted }) {
   const { t } = useI18n();
-  const [rating, setRating] = useState(5);
+  const [scores, setScores] = useState({ collecte: 5, qualite: 5, variete: 5, quantite: 5 });
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
 
   if (!reservation) return null;
 
+  function setScore(key, value) {
+    setScores((s) => ({ ...s, [key]: value }));
+  }
+
   async function handleSubmit() {
     setError("");
     try {
-      await addReview(reservation.id, reservation.bags.merchant_id, rating, comment.trim());
+      const overall = Math.round((scores.collecte + scores.qualite + scores.variete + scores.quantite) / 4);
+      await addReview(reservation.id, reservation.bags.merchant_id, overall, comment.trim(), scores);
       onSubmitted();
       onClose();
     } catch (err) {
@@ -29,16 +48,12 @@ export default function ReviewForm({ reservation, onClose, onSubmitted }) {
         </button>
         <h2>{t("review.title")}</h2>
         <p className="desc">{reservation.bags?.title}</p>
-        <div className="field">
-          <label>{t("review.rating")}</label>
-          <div className="stars" style={{ fontSize: 26, cursor: "pointer" }}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <span key={n} onClick={() => setRating(n)}>
-                {n <= rating ? "★" : "☆"}
-              </span>
-            ))}
+        {CRITERIA.map((key) => (
+          <div className="field" key={key}>
+            <label>{t(`review.criteria.${key}`)}</label>
+            <StarPicker value={scores[key]} onChange={(v) => setScore(key, v)} />
           </div>
-        </div>
+        ))}
         <div className="field">
           <label>{t("review.comment")}</label>
           <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder={t("review.commentPlaceholder")} />

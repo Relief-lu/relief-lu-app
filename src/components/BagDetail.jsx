@@ -13,15 +13,16 @@ function isToday(iso) {
 // Page détail d'un sachet, façon TGTG (grande photo, infos du commerçant,
 // description, carte + itinéraire) — remplace le clic direct sur "Réserver"
 // qui n'ouvrait jusqu'ici que la petite modale, sans vue d'ensemble du sachet.
-// Les sections "Emballages" / "Ingrédients & Allergènes" de la référence ne
-// sont pas reprises ici : relief.lu ne collecte pas encore cette donnée côté
-// commerçant, mieux vaut l'omettre que d'inventer un contenu factice.
+// "Emballages" et "Ingrédients & Allergènes" reprennent le texte générique
+// fixe de la référence — le contenu d'un panier surprise varie chaque jour,
+// donc TGTG ne demande pas au commerçant de le détailler à chaque sachet.
 export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, onBack, onReserve }) {
   const { lang, t } = useI18n();
   const merchant = bag.merchants;
   const hasDiscount = bag.original_price_cents && bag.original_price_cents > bag.price_cents;
   const hasCoords = merchant?.lat != null && merchant?.lng != null;
   const [scrolled, setScrolled] = useState(false);
+  const [allergensOpen, setAllergensOpen] = useState(false);
 
   useEffect(() => {
     const el = document.querySelector(".bag-detail");
@@ -136,6 +137,36 @@ export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, o
           </>
         )}
 
+        {rating?.criteria && Object.keys(rating.criteria).length > 0 && (
+          <>
+            <div className="divider" />
+            <div className="row" style={{ alignItems: "flex-start" }}>
+              <div>
+                <h2>{t("bagDetail.overallExperience")}</h2>
+                <p className="page-sub" style={{ marginTop: -4 }}>
+                  {t("bagDetail.basedOnReviewsPrefix")} {rating.count} {t("bagDetail.basedOnReviewsSuffix")}
+                </p>
+              </div>
+              <div className="overall-rating-box">
+                <span className="stars">★</span> {rating.avg.toFixed(1)}
+              </div>
+            </div>
+            {["collecte", "qualite", "variete", "quantite"].map(
+              (key) =>
+                rating.criteria[key] != null && (
+                  <div className="rating-bar-row" key={key}>
+                    <span>
+                      {t(`review.criteria.${key}`)} <b>{rating.criteria[key].toFixed(1)}</b>
+                    </span>
+                    <div className="rating-bar-track">
+                      <div className="rating-bar-fill" style={{ width: `${(rating.criteria[key] / 5) * 100}%` }} />
+                    </div>
+                  </div>
+                )
+            )}
+          </>
+        )}
+
         {hasCoords && (
           <>
             <div className="divider" />
@@ -153,6 +184,29 @@ export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, o
             </a>
           </>
         )}
+
+        <div className="divider" />
+        <h2>{t("bagDetail.packaging.title")}</h2>
+        <div className="packaging-cards">
+          <div className="packaging-card">
+            <span className="packaging-icon">📦</span>
+            <b>{t("bagDetail.packaging.container")}</b>
+            <span className="page-sub" style={{ margin: 0 }}>{t("bagDetail.packaging.notProvided")}</span>
+          </div>
+          <div className="packaging-card">
+            <span className="packaging-icon">🛍️</span>
+            <b>{t("bagDetail.packaging.bag")}</b>
+            <span className="page-sub" style={{ margin: 0 }}>{t("bagDetail.packaging.notProvided")}</span>
+          </div>
+        </div>
+        <div className="info-banner">ℹ️ {t("bagDetail.packaging.info")}</div>
+
+        <div className="divider" />
+        <button className="accordion-toggle" onClick={() => setAllergensOpen((v) => !v)}>
+          <h2 style={{ margin: 0 }}>{t("bagDetail.allergens.title")}</h2>
+          <span className={`chevron-down ${allergensOpen ? "open" : ""}`}>⌄</span>
+        </button>
+        {allergensOpen && <p className="page-sub" style={{ marginTop: 10 }}>{t("bagDetail.allergens.text")}</p>}
       </div>
 
       <div className="bag-detail-sticky">
