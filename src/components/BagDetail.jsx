@@ -10,6 +10,18 @@ function isToday(iso) {
   return d.toDateString() === now.toDateString();
 }
 
+// Icône de partage standard (carré + flèche vers le haut), le symbole
+// reconnaissable partout aujourd'hui — plus clair qu'une simple flèche "↗".
+function ShareIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3v12" />
+      <path d="M7 8l5-5 5 5" />
+      <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
+    </svg>
+  );
+}
+
 // Page détail d'un sachet, façon TGTG (grande photo, infos du commerçant,
 // description, carte + itinéraire) — remplace le clic direct sur "Réserver"
 // qui n'ouvrait jusqu'ici que la petite modale, sans vue d'ensemble du sachet.
@@ -55,7 +67,7 @@ export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, o
         <div style={{ display: "flex", gap: 10 }}>
           {navigator.share && (
             <button className="icon-circle" onClick={handleShare} aria-label="share">
-              ↗
+              <ShareIcon />
             </button>
           )}
           {onToggleFavorite && (
