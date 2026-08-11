@@ -1,7 +1,14 @@
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { useI18n } from "../lib/i18n.jsx";
 import { formatPickupWindow } from "./BagCard.jsx";
 import { merchantMarkerIcon } from "../lib/leafletIcon";
+
+function isToday(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  return d.toDateString() === now.toDateString();
+}
 
 // Page détail d'un sachet, façon TGTG (grande photo, infos du commerçant,
 // description, carte + itinéraire) — remplace le clic direct sur "Réserver"
@@ -14,6 +21,16 @@ export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, o
   const merchant = bag.merchants;
   const hasDiscount = bag.original_price_cents && bag.original_price_cents > bag.price_cents;
   const hasCoords = merchant?.lat != null && merchant?.lng != null;
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const el = document.querySelector(".bag-detail");
+    function onScroll() {
+      setScrolled(el.scrollTop > 180);
+    }
+    el?.addEventListener("scroll", onScroll);
+    return () => el?.removeEventListener("scroll", onScroll);
+  }, []);
 
   const address = [merchant?.address, merchant?.city].filter(Boolean).join(", ");
   const directionsUrl = hasCoords ? `https://www.google.com/maps/dir/?api=1&destination=${merchant.lat},${merchant.lng}` : null;
@@ -26,6 +43,27 @@ export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, o
 
   return (
     <div className="bag-detail">
+      {/* En-tête compacte qui remplace la grande photo une fois qu'on a
+          scrollé — même bascule que sur la référence, pour garder le nom du
+          commerçant et les actions (retour/partage/favori) visibles. */}
+      <div className={`bag-detail-compact-header ${scrolled ? "visible" : ""}`}>
+        <button className="icon-circle" onClick={onBack} aria-label="back">
+          ←
+        </button>
+        <b>{merchant?.business_name}</b>
+        <div style={{ display: "flex", gap: 10 }}>
+          {navigator.share && (
+            <button className="icon-circle" onClick={handleShare} aria-label="share">
+              ↗
+            </button>
+          )}
+          {onToggleFavorite && (
+            <button className={`icon-circle ${isFavorite ? "active" : ""}`} onClick={() => onToggleFavorite(bag.merchant_id)} aria-label="favorite">
+              {isFavorite ? "♥" : "♡"}
+            </button>
+          )}
+        </div>
+      </div>
       <div className="bag-detail-hero" style={bag.image_url ? { backgroundImage: `url('${bag.image_url}')` } : undefined}>
         {!bag.image_url && <span className="bag-detail-hero-fallback">🥡</span>}
         <div className="bag-detail-hero-top">
@@ -74,6 +112,10 @@ export default function BagDetail({ bag, rating, isFavorite, onToggleFavorite, o
         )}
         <div className="bag-detail-row">
           <span>🕒 {t("pickupWindow")} {formatPickupWindow(bag.pickup_start, bag.pickup_end, lang)}</span>
+          {isToday(bag.pickup_start) && <span className="chip-pill-outline">{t("bagDetail.today")}</span>}
+        </div>
+        <div className="bag-detail-availability-banner">
+          {bag.quantity_left} {t("badge.available")}
         </div>
 
         {address && (

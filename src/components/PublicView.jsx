@@ -79,12 +79,45 @@ export default function PublicView({ user, pendingReserveBagId, onPendingReserve
     return list;
   }, [bags, category, search, sort, userPos]);
 
+  // Sous-ensemble trié par urgence de retrait — reprend le pattern "À sauver
+  // avant qu'il ne soit trop tard" façon TGTG, sans dupliquer les sachets
+  // hors de la grille principale (qui reste la source complète filtrable).
+  const closingSoon = useMemo(() => {
+    return [...filtered].sort((a, b) => new Date(a.pickup_end) - new Date(b.pickup_end)).slice(0, 8);
+  }, [filtered]);
+  const showCarousel = !search.trim() && !category && closingSoon.length > 1;
+
   return (
     <div>
+      <button className="location-picker" onClick={handleLocate}>
+        📍 {geoStatus === "loading" ? t("filters.locating") : userPos ? t("filters.currentPosition") : t("filters.useLocation")}
+        <span className="chevron">›</span>
+      </button>
       <h1 className="page-title">{t("public.title")}</h1>
       <p className="page-sub">{t("public.sub")}</p>
 
       <ImpactBanner />
+
+      {showCarousel && (
+        <div className="carousel-section">
+          <h2>{t("public.closingSoon")}</h2>
+          <div className="carousel-track">
+            {closingSoon.map((bag) => (
+              <div className="carousel-card" key={bag.id}>
+                <BagCard
+                  bag={bag}
+                  onReserve={setReserving}
+                  onOpenDetail={setViewingDetail}
+                  distanceKm={bag.distanceKm}
+                  onToggleFavorite={user ? toggleFavorite : undefined}
+                  isFavorite={favoriteIds.has(bag.merchant_id)}
+                  rating={ratings[bag.merchant_id]}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {bags !== null && bags.length === 0 && <MissionIntro />}
 
