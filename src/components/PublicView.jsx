@@ -5,6 +5,7 @@ import { haversineKm, loadSavedPosition, locate } from "../lib/geolocation";
 import { useFavorites } from "../lib/favorites";
 import { getMerchantRatings } from "../lib/reviews";
 import BagCard from "./BagCard.jsx";
+import BagDetail from "./BagDetail.jsx";
 import ReserveModal from "./ReserveModal.jsx";
 import FiltersBar from "./FiltersBar.jsx";
 import MapView from "./MapView.jsx";
@@ -15,6 +16,7 @@ export default function PublicView({ user, pendingReserveBagId, onPendingReserve
   const { t } = useI18n();
   const [bags, setBags] = useState(null); // null = loading
   const [reserving, setReserving] = useState(null);
+  const [viewingDetail, setViewingDetail] = useState(null);
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("recent");
   const [search, setSearch] = useState("");
@@ -114,6 +116,7 @@ export default function PublicView({ user, pendingReserveBagId, onPendingReserve
               key={bag.id}
               bag={bag}
               onReserve={setReserving}
+              onOpenDetail={setViewingDetail}
               distanceKm={bag.distanceKm}
               onToggleFavorite={user ? toggleFavorite : undefined}
               isFavorite={favoriteIds.has(bag.merchant_id)}
@@ -122,6 +125,19 @@ export default function PublicView({ user, pendingReserveBagId, onPendingReserve
           ))
         )}
       </div>
+      {viewingDetail && (
+        <BagDetail
+          bag={viewingDetail}
+          rating={ratings[viewingDetail.merchant_id]}
+          isFavorite={favoriteIds.has(viewingDetail.merchant_id)}
+          onToggleFavorite={user ? toggleFavorite : undefined}
+          onBack={() => setViewingDetail(null)}
+          onReserve={(bag) => {
+            setViewingDetail(null);
+            setReserving(bag);
+          }}
+        />
+      )}
       <ReserveModal bag={reserving} user={user} onClose={() => setReserving(null)} onReserved={refresh} />
     </div>
   );

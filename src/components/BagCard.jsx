@@ -33,13 +33,13 @@ function useCountdown(startISO, endISO, t) {
   return `${t("countdown.closesIn")} ${formatDuration(end - now)}`;
 }
 
-export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, distanceKm, rating }) {
+export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, distanceKm, rating, onOpenDetail }) {
   const { lang, t } = useI18n();
   const countdown = useCountdown(bag.pickup_start, bag.pickup_end, t);
   const hasDiscount = bag.original_price_cents && bag.original_price_cents > bag.price_cents;
 
   return (
-    <div className="card">
+    <div className="card" onClick={() => onOpenDetail?.(bag)} style={onOpenDetail ? { cursor: "pointer" } : undefined}>
       <div className="thumb" style={bag.image_url ? { backgroundImage: `url('${bag.image_url}')` } : undefined}>
         {!bag.image_url && "🥡"}
         <div className="badge-availability">
@@ -82,7 +82,13 @@ export default function BagCard({ bag, onReserve, onToggleFavorite, isFavorite, 
             {hasDiscount && <span className="price-original">{(bag.original_price_cents / 100).toFixed(2)} €</span>}
             <span className="price">{(bag.price_cents / 100).toFixed(2)} €</span>
           </span>
-          <button className="btn small" onClick={() => onReserve(bag)}>
+          <button
+            className="btn small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onReserve(bag);
+            }}
+          >
             {t("reserve")}
           </button>
         </div>
