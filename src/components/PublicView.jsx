@@ -80,12 +80,14 @@ export default function PublicView({ user, pendingReserveBagId, onPendingReserve
   }, [bags, category, search, sort, userPos]);
 
   // Sous-ensemble trié par urgence de retrait — reprend le pattern "À sauver
-  // avant qu'il ne soit trop tard" façon TGTG, sans dupliquer les sachets
-  // hors de la grille principale (qui reste la source complète filtrable).
+  // avant qu'il ne soit trop tard" façon TGTG. Affiché seulement s'il reste
+  // des sachets EN PLUS dans la grille du dessous — sinon le carrousel et la
+  // grille montrent exactement les mêmes cartes en double, ce qui ressemble
+  // à un bug plutôt qu'à une mise en avant utile.
   const closingSoon = useMemo(() => {
     return [...filtered].sort((a, b) => new Date(a.pickup_end) - new Date(b.pickup_end)).slice(0, 8);
   }, [filtered]);
-  const showCarousel = !search.trim() && !category && closingSoon.length > 1;
+  const showCarousel = !search.trim() && !category && closingSoon.length > 1 && filtered.length > closingSoon.length;
 
   return (
     <div>
