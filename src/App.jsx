@@ -3,6 +3,7 @@ import { LangProvider } from "./lib/i18n.jsx";
 import { getCurrentUser, onAuthChange, consumePendingView, applySessionFromUrlHash } from "./lib/auth";
 import { getMerchantOrNull, isRegistrationComplete } from "./lib/merchants";
 import Header from "./components/Header.jsx";
+import BottomNav from "./components/BottomNav.jsx";
 import PublicView from "./components/PublicView.jsx";
 import MerchantView from "./components/MerchantView.jsx";
 import AccountView from "./components/AccountView.jsx";
@@ -144,6 +145,8 @@ export default function App() {
           <SocialLinks />
         </footer>
       </div>
+
+      <BottomNav view={view} onNavigate={setView} />
 
       {legalModal && (
         <LegalModal

@@ -3,6 +3,9 @@ import { createContext, useContext, useState } from "react";
 const DICT = {
   fr: {
     "nav.merchant": "Inscrivez votre commerce",
+    "nav.bottom.discover": "Découvrir",
+    "nav.bottom.merchant": "Commerçant",
+    "nav.bottom.account": "Profil",
     "public.title": "Les invendus du jour, près de chez toi",
     "public.sub": "Réserve, récupère sur place.",
     "public.loading": "Chargement…",
@@ -126,6 +129,9 @@ const DICT = {
   },
   de: {
     "nav.merchant": "Registrieren Sie Ihr Geschäft",
+    "nav.bottom.discover": "Entdecken",
+    "nav.bottom.merchant": "Geschäft",
+    "nav.bottom.account": "Profil",
     "public.title": "Die Reste von heute, in deiner Nähe",
     "public.sub": "Reservieren, abholen.",
     "public.loading": "Wird geladen…",
@@ -249,6 +255,9 @@ const DICT = {
   },
   en: {
     "nav.merchant": "Register your business",
+    "nav.bottom.discover": "Discover",
+    "nav.bottom.merchant": "Merchant",
+    "nav.bottom.account": "Profile",
     "public.title": "Today's surplus, near you",
     "public.sub": "Reserve, then pick up.",
     "public.loading": "Loading…",

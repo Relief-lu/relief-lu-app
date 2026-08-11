@@ -46,38 +46,6 @@ export default function Header({ view, user, merchant, onNavigate }) {
               </button>
             ))}
           </div>
-          <a
-            href="#"
-            className="nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigate("favorites");
-            }}
-          >
-            {t("nav.favorites")}
-          </a>
-          <a
-            href="#"
-            className="nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigate("account");
-            }}
-          >
-            {t("nav.account")}
-          </a>
-          {!isMerchant && (
-            <a
-              href="#"
-              className="nav-link"
-              onClick={(e) => {
-                e.preventDefault();
-                onNavigate("merchant");
-              }}
-            >
-              {t("nav.merchant")}
-            </a>
-          )}
           {user && (
             <button className="btn secondary small" onClick={logout}>
               {t("account.logout")}
